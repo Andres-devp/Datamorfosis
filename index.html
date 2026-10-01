@@ -220,6 +220,9 @@
   .bigc .bt{font-family:var(--display);font-size:clamp(70px,13vw,150px);line-height:.85;letter-spacing:.03em;background:linear-gradient(180deg,#fff 0%,#ffe7ad 45%,#ffb347 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
     filter:drop-shadow(0 4px 0 #8a3fb8) drop-shadow(0 10px 30px rgba(240,98,176,.6))}
   .bigc.vio .bt{background:linear-gradient(180deg,#fff 0%,#d9ccff 50%,#9d8bff 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 4px 0 #3a2a8a) drop-shadow(0 10px 30px rgba(123,92,240,.6))}
+  .bigc.sm .bt{font-size:clamp(46px,7vw,78px);filter:drop-shadow(0 3px 0 #8a3fb8) drop-shadow(0 6px 18px rgba(240,98,176,.45))}
+  .bigc.sm{animation:bigInSm .35s cubic-bezier(.2,1.3,.4,1),bigOut .35s ease .9s forwards}
+  @keyframes bigInSm{from{transform:scale(1.4);opacity:0}to{transform:none;opacity:1}}
   .bigc .bs{font-weight:800;font-size:13px;letter-spacing:.38em;margin-top:8px;text-shadow:0 2px 10px rgba(12,10,38,.7)}
   @keyframes bigIn{from{transform:scale(2.2);opacity:0}to{transform:none;opacity:1}}
   @keyframes bigOut{to{transform:scale(.9) translateY(-20px);opacity:0}}
@@ -795,8 +798,8 @@ const SFX = {
   deny(){ A.tone(170, .12, 'square', .045); A.tone(130, .14, 'square', .045, null, .09); },
   tick(){ A.tone(2100, .02, 'sine', .025); },
   tier(level){ // stinger en la misma tonalidad que la música
-    const sets = { 3:[69, 72, 76, 81, 84, 88], 2:[69, 72, 76, 81], 1:[72, 76] };
-    A.duckMusic(.35, level === 3 ? 1.2 : .7);
+    const sets = { 3:[69, 72, 76, 81], 2:[72, 76], 1:[76] };
+    A.duckMusic(.5, level === 3 ? .7 : .4);
     (sets[level] || []).forEach((m, i) => { A.tone(mid(m), .3, 'triangle', .11, null, i * .045); A.tone(mid(m + 12), .2, 'sine', .035, null, i * .045); });
   },
   fanfare(){
@@ -972,9 +975,9 @@ function note(text, kind = '', ic = 'i-star', kicker = ''){
   $('notes').appendChild(d); setTimeout(() => d.remove(), 2400);
   while ($('notes').children.length > 3) $('notes').children[0].remove();
 }
-function bigCallout(text, sub = '', vio = false){
+function bigCallout(text, sub = '', vio = false, small = false){
   const b = $('big'); b.innerHTML = '';
-  const d = document.createElement('div'); d.className = 'bigc' + (vio ? ' vio' : '');
+  const d = document.createElement('div'); d.className = 'bigc' + (vio ? ' vio' : '') + (small ? ' sm' : '');
   d.innerHTML = `<div class="bt">${text}</div>${sub ? `<div class="bs">${sub}</div>` : ''}`;
   b.appendChild(d); setTimeout(() => d.remove(), 1600);
 }
@@ -1025,25 +1028,25 @@ function aimClick(){
 function launch(){
   const ae = Math.abs(aim.angle - 45), p = aim.power, score = (1 - ae / 36) * .4 + p * .6;
   let tier = 'OK', level = 0, mult = 1, hyper = 0;
-  // el hiperimpulso crece con la mejora Learning Rate (sin mejoras es moderado)
+  // bono modesto sin mejoras; el hiperimpulso solo aparece al mejorar Learning Rate
   const lr = save.upg.catapulta;
-  if (ae <= 5 && p >= .92){ tier = 'PERFECTO'; level = 3; mult = 1.18; hyper = .2 + .1 * lr; }
-  else if (score >= .8){ tier = 'GENIAL'; level = 2; mult = 1.12; hyper = .12 + .04 * lr; }
-  else if (score >= .62){ tier = 'BIEN'; level = 1; mult = 1.05; }
+  if (ae <= 5 && p >= .92){ tier = 'PERFECTO'; level = 3; mult = 1.08 + .015 * lr; hyper = .07 * lr; }
+  else if (score >= .8){ tier = 'GENIAL'; level = 2; mult = 1.05 + .01 * lr; hyper = .03 * lr; }
+  else if (score >= .62){ tier = 'BIEN'; level = 1; mult = 1.03; }
   const sp = ST.launch * (.55 + .45 * p) * mult;
   const a = aim.angle * Math.PI / 180;
   P.vx = Math.cos(a) * sp; P.vy = Math.sin(a) * sp; P.sq = 1; P.flapBoost = .6; P.hyper = hyper;
   cam.lx = cam.x - P.x; cam.ly = cam.y - P.y;   // continuidad de cámara al despegar
   RUN.tier = tier; if (level === 3) RUN.perfect = true;
   state = 'FLIGHT';
-  hitstop = level === 3 ? .16 : level === 2 ? .1 : .06;
-  shake = 7 + level * 2; flash = level === 3 ? .8 : .3; flashCol = level === 3 ? '#fff4d6' : '#ffffff';
-  cam.zoom *= 1.06 + level * .02;
+  hitstop = level === 3 ? .07 : .04;
+  shake = 5 + level; flash = level === 3 ? .3 : .12; flashCol = '#ffffff';
+  cam.zoom *= 1.03;
   SFX.launch(); if (level) SFX.tier(level);
-  shockwave(P.x, P.y, '#ffffff', 160 + level * 40);
-  emit(P.x, P.y, 36 + level * 12, { col:['#ffffff', '#cdbfff', '#ffc94d', '#f062b0'], sp:320 + level * 80, life:.6, size:5 });
-  if (level === 3) bigCallout('PERFECTO', 'HIPERIMPULSO ACTIVADO');
-  else if (level === 2) bigCallout('GENIAL', 'IMPULSO EXTRA', true);
+  shockwave(P.x, P.y, '#ffffff', 120 + level * 15);
+  emit(P.x, P.y, 26 + level * 4, { col:['#ffffff', '#cdbfff', '#ffc94d', '#f062b0'], sp:260 + level * 30, life:.5, size:4 });
+  if (level === 3) bigCallout('PERFECTO', hyper > 0 ? 'HIPERIMPULSO' : 'LANZAMIENTO ÓPTIMO', false, true);
+  else if (level === 2) note('Gran lanzamiento', 'good', 'i-star');
   else if (level === 1) note('Buen lanzamiento', 'good', 'i-check');
   setPrompt(''); $('ctrl').classList.remove('hidden');
   $('bFlap').classList.toggle('hidden', !IS_TOUCH);
