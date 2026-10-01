@@ -38,6 +38,22 @@
   @keyframes fade{from{opacity:0}to{opacity:1}}
   .dim{background:radial-gradient(ellipse at center,rgba(12,10,38,.55),rgba(12,10,38,.88));backdrop-filter:blur(6px)}
 
+  /* intro de estudio */
+  #scrStudio{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:radial-gradient(ellipse at 50% 45%,#141033 0%,#05040f 75%);z-index:40;cursor:pointer;transition:opacity .7s ease}
+  #scrStudio.out{opacity:0;pointer-events:none}
+  .studio-mark{width:118px;height:118px;overflow:visible}
+  .studio-mark .st{fill:none;stroke:#fff;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:320;stroke-dashoffset:320;animation:draw 1.1s cubic-bezier(.6,0,.2,1) forwards}
+  .studio-mark .hex{stroke:rgba(255,255,255,.35);stroke-width:3;animation-duration:1.4s}
+  .studio-mark .til{stroke:url(#agGrad);stroke-width:5.5;animation-delay:.6s}
+  .studio-mark .bar{animation-delay:.35s}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .studio-name{font-family:var(--display);font-size:clamp(46px,8vw,86px);line-height:1;letter-spacing:.3em;padding-left:.3em;color:#fff;opacity:0;animation:studioIn 1s cubic-bezier(.2,.8,.2,1) .9s forwards}
+  @keyframes studioIn{from{opacity:0;letter-spacing:.75em;filter:blur(10px)}to{opacity:1;letter-spacing:.3em;filter:none}}
+  .studio-line{width:0;height:2px;background:var(--grad);animation:grow .8s ease 1.4s forwards}
+  @keyframes grow{to{width:min(220px,50vw)}}
+  .studio-sub{font-weight:700;font-size:11px;letter-spacing:.55em;padding-left:.55em;color:rgba(255,255,255,.6);opacity:0;animation:fade .6s ease 1.8s forwards}
+  .studio-skip{position:absolute;bottom:22px;right:26px;font-weight:700;font-size:9.5px;letter-spacing:.3em;color:rgba(255,255,255,.3)}
+
   /* splash */
   #scrSplash{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(ellipse at 50% 40%,#2a1f7a 0%,#0c0a26 70%);cursor:pointer}
   #scrSplash .s-logo{width:120px;height:120px}
@@ -311,13 +327,28 @@
 <div id="big"></div>
 <div id="ach"></div>
 
+<!-- Intro de estudio -->
+<div id="scrStudio" class="screen">
+  <svg class="studio-mark" viewBox="0 0 100 100" aria-label="AÑA GAMES">
+    <defs><linearGradient id="agGrad" x1="0" x2="1"><stop offset="0" stop-color="#4f6bff"/><stop offset=".5" stop-color="#8a5cf6"/><stop offset="1" stop-color="#f062b0"/></linearGradient></defs>
+    <path class="st hex" d="M50 3 L91 26.5 L91 73.5 L50 97 L9 73.5 L9 26.5 Z"/>
+    <path class="st" d="M29 79 L50 34 L71 79"/>
+    <path class="st bar" d="M37 63 H63"/>
+    <path class="st til" d="M32 23 C38 13 44 14 50 20 C56 26 62 27 68 17"/>
+  </svg>
+  <div class="studio-name">AÑA GAMES</div>
+  <div class="studio-line"></div>
+  <div class="studio-sub">PRESENTA</div>
+  <div class="studio-skip">CLIC PARA SALTAR</div>
+</div>
+
 <!-- Splash -->
 <div id="scrSplash" class="screen">
   <canvas class="s-logo" id="splashLogo" width="240" height="240"></canvas>
   <div class="s-kick">GRUPO ESTUDIANTIL</div>
   <div class="s-name">DATAMORFOSIS</div>
   <div class="s-press">PULSA PARA COMENZAR</div>
-  <div class="s-foot">INTELIGENCIA ARTIFICIAL · CIENCIA DE DATOS · TRANSFORMACIÓN</div>
+  <div class="s-foot">INTELIGENCIA ARTIFICIAL · CIENCIA DE DATOS · TRANSFORMACIÓN<br>UN JUEGO DE AÑA GAMES</div>
 </div>
 
 <!-- Menú principal -->
@@ -342,7 +373,7 @@
       <div class="stat"><div class="l"><svg class="i c-db"><use href="#i-db"/></svg>DATASETS</div><div class="v" id="mCry">0</div></div>
     </div>
   </div>
-  <div class="menu-foot">Grupo Estudiantil Datamorfosis · IA &amp; Ciencia de Datos · v2.0</div>
+  <div class="menu-foot">Hecho por AÑA GAMES · Grupo Estudiantil Datamorfosis · v2.1</div>
 </div>
 
 <!-- Tienda -->
@@ -2030,7 +2061,7 @@ cv.addEventListener('pointerdown', e => { e.preventDefault(); primary(); });
 cv.addEventListener('contextmenu', e => e.preventDefault());
 addEventListener('pointerdown', () => { if (state !== 'SPLASH') A.init(); }, { capture:true });
 addEventListener('keydown', e => {
-  if (state === 'SPLASH'){ enterMenu(); return; }
+  if (state === 'SPLASH'){ if (!introDone) skipIntro(); else enterMenu(); return; }
   A.init();
   if (e.code === 'Escape' || e.code === 'KeyP'){
     if (settingsOpen()){ closeSettings(); return; }
@@ -2052,6 +2083,16 @@ bT.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(
 ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => bT.addEventListener(ev, () => { input.turboBtn = false; input.turbo = input.turboKey; }));
 $('bFlap').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); primary(); });
 $('bPause').addEventListener('click', () => { SFX.ui(); setPause(true); });
+
+// ---------- intro AÑA GAMES ----------
+let introDone = false;
+function skipIntro(){
+  if (introDone) return; introDone = true;
+  const s = $('scrStudio'); s.classList.add('out');
+  setTimeout(() => s.classList.add('hidden'), 750);
+}
+$('scrStudio').addEventListener('pointerdown', e => { e.stopPropagation(); skipIntro(); });
+setTimeout(skipIntro, 3600);
 
 // ---------- menús ----------
 function enterMenu(){ if (state !== 'SPLASH') return; A.init(); SFX.ui(); goMenu(); }
