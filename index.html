@@ -11,7 +11,8 @@
 <meta name="description" content="Vuelo de Datos — juego del Grupo Estudiantil Datamorfosis. Hecho por AÑA GAMES.">
 <meta name="theme-color" content="#0c0a26">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="apple-touch-icon" id="appleIcon" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -21,11 +22,12 @@
     --txt:#f3f0ff; --muted:#a39dd4; --blue:#4f6bff; --vio:#7b5cf0; --mag:#b44fe0; --pink:#f062b0; --gold:#ffc94d; --mint:#3fe0b0; --red:#ff5470;
     --grad:linear-gradient(90deg,#4f6bff 0%,#8a5cf6 50%,#f062b0 100%);
     --st:env(safe-area-inset-top,0px); --sr:env(safe-area-inset-right,0px); --sb:env(safe-area-inset-bottom,0px); --sl:env(safe-area-inset-left,0px);
+    --vfix:0px;
     --display:'Bebas Neue',Impact,'Arial Narrow',sans-serif; --ui:'Montserrat',system-ui,sans-serif;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);font-family:var(--ui);color:var(--txt);user-select:none;-webkit-user-select:none;touch-action:none}
-  canvas#game{display:block;position:fixed;inset:0}
+  canvas#game{display:block;position:fixed;top:0;left:0;width:100%;height:100%}
   .hidden{display:none!important}
   svg.i{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
@@ -137,6 +139,12 @@
   .card.skin canvas{width:96px;height:72px;background:linear-gradient(180deg,#26206a,#3a2a8a);clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
   .card.goal.ok .ico{background:rgba(63,224,176,.18);box-shadow:inset 0 0 0 1px rgba(63,224,176,.5);color:var(--mint)}
   .p-foot{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+  /* cabecera y botones siempre visibles: solo se desplaza el contenido */
+  #scrShop .panel,#scrResults .panel{display:flex;flex-direction:column;overflow:hidden}
+  #scrShop .p-head,#scrShop .tabs,.p-foot{flex:none}
+  #shopBody,#scrResults .res{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:rgba(190,175,255,.35) transparent}
+  #shopBody{align-content:start;padding-right:4px}
 
   /* resultados */
   .res{display:grid;grid-template-columns:230px 1fr;gap:28px;align-items:stretch}
@@ -172,6 +180,10 @@
 
   /* ---------- HUD ---------- */
   #hud{position:fixed;inset:0;pointer-events:none;z-index:10}
+  /* modo app de iPhone: si el viewport llega corto, todo se estira a la pantalla real (100vh) */
+  .ios-app{--vfix:calc(100% - 100vh)}
+  .ios-app canvas#game{height:100vh}
+  .ios-app #hud,.ios-app .screen{bottom:auto;height:100vh}
   .hud-tl{position:absolute;top:0;left:0;padding:calc(14px + var(--st)) 60px 14px calc(20px + var(--sl));background:linear-gradient(90deg,rgba(12,10,38,.62),rgba(12,10,38,0))}
   .hud-dist{font-family:var(--display);font-size:66px;line-height:.85;letter-spacing:.02em;text-shadow:0 3px 0 rgba(12,10,38,.3)}
   .hud-dist em{font-style:normal;font-family:var(--ui);font-weight:800;font-size:15px;color:#c9bbff;margin-left:6px;letter-spacing:.1em}
@@ -200,12 +212,12 @@
   #altBest{position:absolute;left:-7px;right:-7px;height:2px;background:var(--gold);box-shadow:0 0 8px var(--gold)}
   #altMark{position:absolute;left:50%;width:14px;height:14px;margin-left:-7px;margin-bottom:-7px;background:#fff;transform:rotate(45deg);box-shadow:0 0 12px #fff}
 
-  #prompt{position:fixed;left:0;right:0;bottom:118px;display:flex;justify-content:center;align-items:center;gap:12px;pointer-events:none;z-index:11;
+  #prompt{position:fixed;left:0;right:0;bottom:calc(118px + var(--vfix));display:flex;justify-content:center;align-items:center;gap:12px;pointer-events:none;z-index:11;
     font-family:var(--display);font-size:30px;letter-spacing:.1em;text-shadow:0 2px 12px rgba(12,10,38,.6);animation:fade .3s}
   #prompt kbd{font-size:12px;padding:4px 8px;text-shadow:none;background:rgba(12,10,38,.4)}
 
   #ctrl{position:fixed;z-index:12}
-  .cbtn{position:fixed;bottom:calc(96px + var(--sb));width:86px;height:86px;border-radius:50%;border:2px solid rgba(255,255,255,.4);font-family:var(--ui);font-weight:800;color:#fff;
+  .cbtn{position:fixed;bottom:calc(96px + var(--sb) + var(--vfix));width:86px;height:86px;border-radius:50%;border:2px solid rgba(255,255,255,.4);font-family:var(--ui);font-weight:800;color:#fff;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;touch-action:none;background:rgba(12,10,38,.5);backdrop-filter:blur(6px)}
   .cbtn svg.i{font-size:32px}
   .cbtn span{font-size:9.5px;letter-spacing:.18em}
@@ -268,6 +280,13 @@
     .center{padding:calc(12px + var(--st)) calc(12px + var(--sr)) calc(12px + var(--sb)) calc(12px + var(--sl))}
     .panel{padding:20px 18px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px - var(--st) - var(--sb))}
     .p-title{font-size:40px}
+    .p-head{flex-wrap:nowrap;align-items:flex-end;padding-bottom:12px}
+    .p-kick{letter-spacing:.2em}
+    .wallet{gap:6px}
+    .wallet .pill{padding:5px 9px 3px 7px}
+    .wallet .pill b{font-size:20px}
+    .wallet .pill svg.i{font-size:15px}
+    .tabs{margin:10px 0 12px}
     .tabs button{font-size:21px;padding:6px 10px 4px}
     .p-foot .btn{flex:1 1 auto}
     .hud-tl{padding:calc(12px + var(--st)) 20px 12px calc(14px + var(--sl))}
@@ -282,10 +301,10 @@
     .meter label{letter-spacing:.16em}
     .fbar{width:80px}
     #altTrack{right:calc(12px + var(--sr));width:5px;top:calc(160px + var(--st))}
-    .cbtn{bottom:calc(88px + var(--sb));width:78px;height:78px}
+    .cbtn{bottom:calc(88px + var(--sb) + var(--vfix));width:78px;height:78px}
     #bFlap{left:calc(16px + var(--sl))}
     #bTurbo{right:calc(40px + var(--sr))}
-    #prompt{font-size:21px;bottom:calc(184px + var(--sb));padding:0 12px;flex-wrap:wrap}
+    #prompt{font-size:21px;bottom:calc(184px + var(--sb) + var(--vfix));padding:0 12px;flex-wrap:wrap}
     #notes{top:calc(118px + var(--st))}
     #ach{top:calc(118px + var(--st))}
     .set-row{grid-template-columns:110px 1fr 40px}
@@ -363,11 +382,11 @@
     #altTrack{top:calc(100px + var(--st));bottom:70px;right:calc(14px + var(--sr));width:5px}
     #altTrack .cap{top:-46px}
     #altTrack .moon{top:-30px;font-size:18px}
-    .cbtn{bottom:calc(14px + var(--sb));width:72px;height:72px}
+    .cbtn{bottom:calc(14px + var(--sb) + var(--vfix));width:72px;height:72px}
     .cbtn svg.i{font-size:26px}
     #bFlap{left:calc(18px + var(--sl))}
     #bTurbo{right:calc(46px + var(--sr))}
-    #prompt{font-size:20px;bottom:calc(64px + var(--sb))}
+    #prompt{font-size:20px;bottom:calc(64px + var(--sb) + var(--vfix))}
     #prompt kbd{font-size:10px;padding:3px 6px}
     #notes{top:calc(58px + var(--st))}
     .note{font-size:11px;padding:7px 14px 6px 12px}
@@ -618,14 +637,21 @@ const cv = $('game'), ctx = cv.getContext('2d');
 let W = 0, H = 0, DPR = 1, BASEZ = 1;
 function resize(){
   DPR = Math.min(window.devicePixelRatio || 1, 2);
-  W = innerWidth; H = innerHeight;
+  // el tamaño lo fija el CSS (100% del viewport): en modo app de iOS innerHeight llega corto y dejaba una franja abajo
+  const r = cv.getBoundingClientRect();
+  W = Math.round(r.width) || innerWidth; H = Math.round(r.height) || innerHeight;
   cv.width = Math.floor(W * DPR); cv.height = Math.floor(H * DPR);
-  cv.style.width = W + 'px'; cv.style.height = H + 'px';
   BASEZ = clamp(Math.min(H / 760, W / 900), 0.55, 1.35);
 }
 addEventListener('resize', resize); resize();
+addEventListener('orientationchange', () => setTimeout(resize, 300));
+addEventListener('pageshow', resize);
+if (window.visualViewport) visualViewport.addEventListener('resize', resize);
+if (window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+[250, 1000].forEach(t => setTimeout(resize, t));   // iOS asienta el viewport tarde al abrir desde el inicio
 const IS_TOUCH = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || matchMedia('(pointer: coarse)').matches;
 if (IS_TOUCH) document.body.classList.add('touch');
+if (navigator.standalone === true) document.documentElement.classList.add('ios-app');   // abierto desde el inicio en iPhone
 
 // ---------- constantes ----------
 const PXM = 20;          // píxeles por metro
@@ -1466,7 +1492,11 @@ function updateCamera(dt){
     viewT = cam.y + oy / cam.zoom; viewB = cam.y - (H - oy) / cam.zoom;
     return;
   } else if (state === 'AIM'){
-    tz = BASEZ * 1.08; tx = PAD_X + W * .12 / tz; ty = PAD_Y;
+    // lanzador con espacio a la izquierda para la barra de potencia y arriba para el arco (y el HUD)
+    const u = aimScale(), hudH = W < H ? 100 : 76;
+    const sxT = Math.max(ox - W * .12, 124 * u + 14);
+    const syT = clamp(hudH + 214 * u, oy, H * .72);
+    tz = BASEZ * 1.08; tx = PAD_X - (sxT - ox) / tz; ty = PAD_Y + (syT - oy) / tz;
   } else {
     tz = BASEZ * 1.2;
     const sxT = W > 760 ? W * .7 : W * .5;
@@ -2138,10 +2168,12 @@ function drawSpeedLines(c){
     c.beginPath(); c.moveTo(x, y); c.lineTo(x - Math.cos(ang) * len, y - Math.sin(ang) * len); c.stroke();
   }
 }
+// escala de la mira según la pantalla (en celular se encoge para caber)
+const aimScale = () => clamp(Math.min(W / 430, H / 520), .6, 1);
 function drawAimUI(c){
-  const z = cam.zoom, sx = ox + (PAD_X - cam.x) * z, sy = oy + (cam.y - PAD_Y) * z, R = 128;
+  const z = cam.zoom, sx = ox + (PAD_X - cam.x) * z, sy = oy + (cam.y - PAD_Y) * z, R = 128, u = aimScale();
   const rad = d => -d * Math.PI / 180;
-  c.save(); c.translate(sx, sy);
+  c.save(); c.translate(sx, sy); c.scale(u, u);
   c.lineWidth = 10; c.strokeStyle = 'rgba(12,10,38,.45)'; c.beginPath(); c.arc(0, 0, R, rad(81), rad(9)); c.stroke();
   c.lineWidth = 10; c.strokeStyle = 'rgba(63,224,176,.95)'; c.beginPath(); c.arc(0, 0, R, rad(50), rad(40)); c.stroke();
   c.strokeStyle = 'rgba(255,255,255,.8)'; c.lineWidth = 2;
@@ -2158,7 +2190,8 @@ function drawAimUI(c){
   c.strokeText(lbl, lx, ly); c.fillText(lbl, lx, ly);
   c.restore();
   if (aim.phase === 1){
-    const N = 18, bx = sx - 104, segH = 9, gap = 3, bh = N * (segH + gap), by = sy - bh + 40, bw = 26;
+    c.save(); c.translate(sx, sy); c.scale(u, u);
+    const N = 18, bx = -104, segH = 9, gap = 3, bh = N * (segH + gap), by = -bh + 40, bw = 26;
     c.fillStyle = 'rgba(12,10,38,.62)'; c.fillRect(bx - 8, by - 34, bw + 16, bh + 38);
     const lit = Math.round(aim.power * N);
     for (let k = 0; k < N; k++){
@@ -2169,8 +2202,9 @@ function drawAimUI(c){
       c.beginPath(); c.moveTo(bx + 3, yy); c.lineTo(bx + bw, yy); c.lineTo(bx + bw - 3, yy + segH); c.lineTo(bx, yy + segH); c.closePath(); c.fill();
       c.shadowBlur = 0;
     }
-    c.font = `800 9px ${FU}`; c.textAlign = 'center'; c.fillStyle = '#fff'; c.fillText('POTENCIA', bx + bw / 2, by - 20);
+    c.font = `800 ${(9 / u).toFixed(1)}px ${FU}`; c.textAlign = 'center'; c.fillStyle = '#fff'; c.fillText('POTENCIA', bx + bw / 2, by - 20);
     c.fillStyle = '#ffc94d'; c.fillText('MAX', bx + bw / 2, by - 8);
+    c.restore();
   }
 }
 function drawGlitch(c){
@@ -2413,7 +2447,6 @@ $('btnReset').onclick = () => {
     drawButterfly(c, S * .46, S * .53, S / 150, 0, 1, SKINS[0], 1.2);
     const url = ic.toDataURL('image/png');
     const l = document.createElement('link'); l.rel = 'icon'; l.type = 'image/png'; l.sizes = '180x180'; l.href = url; document.head.appendChild(l);
-    $('appleIcon').href = url;
   }catch(e){}
 })();
 
