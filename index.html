@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Datamorfosis: Vuelo de Datos</title>
+<meta name="description" content="Vuelo de Datos — juego del Grupo Estudiantil Datamorfosis. Hecho por AÑA GAMES.">
+<meta name="theme-color" content="#0c0a26">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" id="appleIcon" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -502,7 +506,7 @@ const CELL = 800;
 const PAD_X = -40, PAD_Y = 228;
 
 const UPG = [
-  { id:'catapulta', name:'Learning Rate',      icon:'i-rocket',  desc:'Más potencia en el lanzamiento.',     max:8, base:40,  val:L => Math.round((1500 + 300 * L) / PXM * 3.6) + ' km/h' },
+  { id:'catapulta', name:'Learning Rate',      icon:'i-rocket',  desc:'Más potencia en el lanzamiento.',     max:8, base:40,  val:L => Math.round((1150 + 340 * L) / PXM * 3.6) + ' km/h' },
   { id:'alas',      name:'Optimizador Adam',   icon:'i-feather', desc:'Menos arrastre y planeo más largo.',  max:6, base:60,  val:L => 'Planeo ' + (100 + 60 * L) + '%' },
   { id:'nectar',    name:'Épocas',             icon:'i-cycle',   desc:'Aleteos extra en cada vuelo.',        max:6, base:50,  val:L => (1 + L) + (L ? ' épocas' : ' época') },
   { id:'turbo',     name:'GPU Turbo',          icon:'i-chip',    desc:'Propulsor: mantén Shift o el botón.', max:7, base:100, val:L => L ? (0.8 + 0.32 * L).toFixed(2) + ' s' : 'Bloqueado' },
@@ -562,7 +566,7 @@ function persist(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }
 function stats(){
   const u = save.upg;
   return {
-    launch: 1500 + 300 * u.catapulta,
+    launch: 1150 + 340 * u.catapulta,
     drag: 0.10 - 0.012 * u.alas,
     lift: 0.35 + 0.22 * u.alas,
     flaps: 1 + u.nectar,
@@ -882,7 +886,7 @@ function drawButterfly(c, x, y, s, rot, open, sk, t, sq = 1, face = 'happy'){
 let state = 'SPLASH';          // SPLASH, MENU, AIM, FLIGHT, RESULTS
 let paused = false;
 let time = 0, realTime = 0, hitstop = 0;
-const cam = { x:0, y:0, zoom:1 };
+const cam = { x:0, y:0, zoom:1, lx:0, ly:0 };
 let ox = 0, oy = 0, viewL = 0, viewR = 0, viewT = 0, viewB = 0;
 let shake = 0, flash = 0, flashCol = '#fff', glitchT = 0;
 const P = { x:PAD_X, y:PAD_Y, vx:0, vy:0, r:22, flaps:0, fuel:0, fuelMax:0, shields:0, onGround:false, stopT:0,
@@ -1021,17 +1025,20 @@ function aimClick(){
 function launch(){
   const ae = Math.abs(aim.angle - 45), p = aim.power, score = (1 - ae / 36) * .4 + p * .6;
   let tier = 'OK', level = 0, mult = 1, hyper = 0;
-  if (ae <= 5 && p >= .92){ tier = 'PERFECTO'; level = 3; mult = 1.5; hyper = 1.0; }
-  else if (score >= .8){ tier = 'GENIAL'; level = 2; mult = 1.25; hyper = .45; }
-  else if (score >= .62){ tier = 'BIEN'; level = 1; mult = 1.1; }
+  // el hiperimpulso crece con la mejora Learning Rate (sin mejoras es moderado)
+  const lr = save.upg.catapulta;
+  if (ae <= 5 && p >= .92){ tier = 'PERFECTO'; level = 3; mult = 1.18; hyper = .2 + .1 * lr; }
+  else if (score >= .8){ tier = 'GENIAL'; level = 2; mult = 1.12; hyper = .12 + .04 * lr; }
+  else if (score >= .62){ tier = 'BIEN'; level = 1; mult = 1.05; }
   const sp = ST.launch * (.55 + .45 * p) * mult;
   const a = aim.angle * Math.PI / 180;
-  P.vx = Math.cos(a) * sp; P.vy = Math.sin(a) * sp; P.sq = .55; P.flapBoost = .6; P.hyper = hyper;
+  P.vx = Math.cos(a) * sp; P.vy = Math.sin(a) * sp; P.sq = 1; P.flapBoost = .6; P.hyper = hyper;
+  cam.lx = cam.x - P.x; cam.ly = cam.y - P.y;   // continuidad de cámara al despegar
   RUN.tier = tier; if (level === 3) RUN.perfect = true;
   state = 'FLIGHT';
   hitstop = level === 3 ? .16 : level === 2 ? .1 : .06;
-  shake = 12 + level * 5; flash = level === 3 ? .9 : .35; flashCol = level === 3 ? '#fff4d6' : '#ffffff';
-  cam.zoom *= 1.12 + level * .03;
+  shake = 7 + level * 2; flash = level === 3 ? .8 : .3; flashCol = level === 3 ? '#fff4d6' : '#ffffff';
+  cam.zoom *= 1.06 + level * .02;
   SFX.launch(); if (level) SFX.tier(level);
   shockwave(P.x, P.y, '#ffffff', 160 + level * 40);
   emit(P.x, P.y, 36 + level * 12, { col:['#ffffff', '#cdbfff', '#ffc94d', '#f062b0'], sp:320 + level * 80, life:.6, size:5 });
@@ -1200,7 +1207,7 @@ function stepFlight(dt){
   if (boosting){
     const sp = Math.hypot(P.vx, P.vy) || 1;
     let dx = P.vx / sp + .15, dy = P.vy / sp + .4; const n = Math.hypot(dx, dy); dx /= n; dy /= n;
-    const acc = (P.turboOn ? ST.turboAcc : 0) + (P.hyper > 0 ? 1900 : 0);
+    const acc = (P.turboOn ? ST.turboAcc : 0) + (P.hyper > 0 ? 1500 : 0);
     P.vx += dx * acc * dt; P.vy += dy * acc * dt;
     if (P.turboOn) P.fuel = Math.max(0, P.fuel - dt);
     if (P.hyper > 0) P.hyper -= dt;
@@ -1312,10 +1319,23 @@ function update(dt, rdt){
 
 function updateCamera(dt){
   let tz, tx, ty;
+  ox = W * .36; oy = H * .52;
   if (state === 'FLIGHT' || state === 'RESULTS'){
+    // seguimiento exacto + adelanto suavizado: la mariposa queda estable en pantalla
     const sp = Math.hypot(P.vx, P.vy);
-    tz = BASEZ * clamp(1.05 - sp / 7500 - Math.min(.15, P.y / 60000), .48, 1.05);
-    tx = P.x + P.vx * .1; ty = P.y;
+    tz = BASEZ * clamp(1.05 - sp / 9000 - Math.min(.12, P.y / 70000), .62, 1.05);
+    cam.zoom += (tz - cam.zoom) * Math.min(1, dt * 2.4);
+    const tlx = clamp(P.vx * .1, 0, W * .2 / cam.zoom), tly = clamp(P.vy * .06, -H * .12 / cam.zoom, H * .12 / cam.zoom);
+    cam.lx += (tlx - cam.lx) * Math.min(1, dt * 2.5);
+    cam.ly += (tly - cam.ly) * Math.min(1, dt * 2.5);
+    cam.x = P.x + cam.lx;
+    cam.y = Math.max(P.y + cam.ly, (H * .33) / cam.zoom);
+    const sx = ox + (P.x - cam.x) * cam.zoom, sy = oy + (cam.y - P.y) * cam.zoom;
+    if (sx > W * .75) cam.x = P.x - (W * .75 - ox) / cam.zoom;
+    if (sy < H * .18) cam.y = P.y - (oy - H * .18) / cam.zoom;
+    viewL = cam.x - ox / cam.zoom; viewR = cam.x + (W - ox) / cam.zoom;
+    viewT = cam.y + oy / cam.zoom; viewB = cam.y - (H - oy) / cam.zoom;
+    return;
   } else if (state === 'AIM'){
     tz = BASEZ * 1.08; tx = PAD_X + W * .12 / tz; ty = PAD_Y;
   } else {
@@ -1326,15 +1346,8 @@ function updateCamera(dt){
   cam.zoom += (tz - cam.zoom) * Math.min(1, dt * 2.4);
   const minY = (H * .33) / cam.zoom;
   ty = Math.max(ty, minY);
-  const k = state === 'FLIGHT' ? 10 : 4;
-  cam.x += (tx - cam.x) * Math.min(1, dt * k);
-  cam.y += (ty - cam.y) * Math.min(1, dt * k);
-  ox = W * .36; oy = H * .52;
-  if (state === 'FLIGHT'){
-    const sx = ox + (P.x - cam.x) * cam.zoom, sy = oy + (cam.y - P.y) * cam.zoom;
-    if (sx > W * .8) cam.x = P.x - (W * .8 - ox) / cam.zoom;
-    if (sy < H * .15) cam.y = P.y - (oy - H * .15) / cam.zoom;
-  }
+  cam.x += (tx - cam.x) * Math.min(1, dt * 4);
+  cam.y += (ty - cam.y) * Math.min(1, dt * 4);
   viewL = cam.x - ox / cam.zoom; viewR = cam.x + (W - ox) / cam.zoom;
   viewT = cam.y + oy / cam.zoom; viewB = cam.y - (H - oy) / cam.zoom;
 }
@@ -1409,7 +1422,8 @@ function biomeAt(distM){
 function render(){
   const c = ctx, z = cam.zoom, altCam = Math.max(0, cam.y / PXM - 10);
   c.setTransform(DPR, 0, 0, DPR, 0, 0);
-  const sx0 = (Math.random() - .5) * shake, sy0 = (Math.random() - .5) * shake;
+  // sacudida suave (oscilación, no ruido aleatorio por cuadro)
+  const sx0 = Math.sin(realTime * 63) * shake * .45, sy0 = Math.cos(realTime * 57) * shake * .45;
   const [st, sb] = skyAt(altCam);
   const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, st); g.addColorStop(1, sb);
   c.fillStyle = g; c.fillRect(0, 0, W, H);
@@ -1909,8 +1923,9 @@ function drawPlayer(c){
   const sh = clamp(1 - P.y / 900, 0, 1);
   if (sh > 0){ c.fillStyle = `rgba(35,28,92,${.25 * sh})`; c.beginPath(); c.ellipse(x, 8, 30 * (.5 + sh * .5), 7 * (.5 + sh * .5), 0, 0, TAU); c.fill(); }
   const boosting = P.turboOn || P.hyper > 0;
+  const ds = (state === 'FLIGHT' || state === 'RESULTS') ? clamp(BASEZ * .95 / cam.zoom, 1, 1.5) : 1;
   if (boosting){
-    const sp = Math.hypot(P.vx, P.vy) || 1, bx = -P.vx / sp, by = P.vy / sp, len = 60 + Math.random() * 30;
+    const sp = Math.hypot(P.vx, P.vy) || 1, bx = -P.vx / sp, by = P.vy / sp, len = (60 + Math.random() * 30) * ds;
     c.save(); c.globalCompositeOperation = 'lighter';
     const gg = c.createLinearGradient(x, y, x + bx * len, y + by * len); gg.addColorStop(0, 'rgba(255,240,180,.95)'); gg.addColorStop(.4, 'rgba(240,98,176,.8)'); gg.addColorStop(1, 'rgba(123,92,240,0)');
     c.fillStyle = gg; c.beginPath(); c.moveTo(x - by * 15, y + bx * 15); c.lineTo(x + bx * len, y + by * len); c.lineTo(x + by * 15, y - bx * 15); c.fill();
@@ -1919,29 +1934,34 @@ function drawPlayer(c){
   if (state === 'FLIGHT' && P.shields > 0){
     c.strokeStyle = `rgba(110,231,255,${.45 + .2 * Math.sin(time * 5)})`; c.lineWidth = 2.5;
     c.fillStyle = 'rgba(110,231,255,.1)'; c.beginPath();
-    for (let k = 0; k < 6; k++){ const a = k / 6 * TAU + time * .5; const px = x + Math.cos(a) * 48, py = y + Math.sin(a) * 48; k ? c.lineTo(px, py) : c.moveTo(px, py); }
+    for (let k = 0; k < 6; k++){ const a = k / 6 * TAU + time * .5; const px = x + Math.cos(a) * 52 * ds, py = y + Math.sin(a) * 52 * ds; k ? c.lineTo(px, py) : c.moveTo(px, py); }
     c.closePath(); c.fill(); c.stroke();
   }
   let open;
   if (state === 'MENU' || state === 'AIM' || state === 'SPLASH'){ P.flapT += .016 * 7; open = .3 + .7 * Math.abs(Math.sin(P.flapT)); }
   else if (P.onGround){ P.flapT += .016 * 3; open = .55 + .45 * Math.abs(Math.sin(P.flapT)); }
-  else if (P.flapBoost > 0 || boosting){ P.flapT += .016 * 26; open = .2 + .8 * Math.abs(Math.sin(P.flapT)); }
+  else if (P.flapBoost > 0 || boosting){ P.flapT += .016 * 16; open = .3 + .7 * Math.abs(Math.sin(P.flapT)); }
   else if (P.vy < -100){ open = .88 + .12 * Math.sin(time * 4); }
   else { P.flapT += .016 * 10; open = .3 + .7 * Math.abs(Math.sin(P.flapT)); }
   let rot = 0;
   if (state === 'FLIGHT' || state === 'RESULTS') rot = clamp(Math.atan2(-P.vy, Math.max(80, P.vx)) * .45, -.55, .55);
   if (state === 'AIM') rot = -(aim.angle - 45) * Math.PI / 180 * .4;
   const bob = (state === 'MENU') ? Math.sin(time * 2.2) * 5 : 0;
-  const face = P.hurt > 0 ? 'dizzy' : (boosting || Math.hypot(P.vx, P.vy) > 2600) ? 'wow' : 'happy';
-  if (boosting || Math.hypot(P.vx, P.vy) > 2800){
-    for (let k = 3; k >= 1; k--){
-      c.globalAlpha = .12 * (4 - k) / 3;
-      drawButterfly(c, x - P.vx * .018 * k, y + P.vy * .018 * k + bob, 1, rot, open, curSkin(), time, P.sq, face);
-    }
-    c.globalAlpha = 1;
+  const spd = Math.hypot(P.vx, P.vy);
+  const face = P.hurt > 0 ? 'dizzy' : (boosting || spd > 2600) ? 'wow' : 'happy';
+  // tamaño en pantalla estable aunque la cámara se aleje
+  // estela de velocidad suave (en vez de copias de la mariposa)
+  if (state === 'FLIGHT' && spd > 1300){
+    const a = clamp((spd - 1300) / 2200, 0, 1), dx = -P.vx / spd, dy = P.vy / spd, len = Math.min(240, spd * .06) * ds, w = 22 * ds;
+    const k = skinColors(curSkin(), time);
+    c.save(); c.globalAlpha = .55 * a;
+    const gg = c.createLinearGradient(x, y, x + dx * len, y + dy * len); gg.addColorStop(0, k.a); gg.addColorStop(1, 'rgba(255,255,255,0)');
+    c.fillStyle = gg; c.beginPath(); c.moveTo(x - dy * w, y + dx * w); c.quadraticCurveTo(x + dx * len * .5, y + dy * len * .5, x + dx * len, y + dy * len);
+    c.quadraticCurveTo(x + dx * len * .5, y + dy * len * .5, x + dy * w, y - dx * w); c.closePath(); c.fill();
+    c.restore();
   }
   if (P.invuln > 0 && Math.floor(time * 20) % 2 === 0 && P.hurt <= 0) c.globalAlpha = .5;
-  drawButterfly(c, x, y + bob, 1, rot, open, curSkin(), time, P.sq, face);
+  drawButterfly(c, x, y + bob, ds, rot, open, curSkin(), time, P.sq, face);
   c.globalAlpha = 1;
   if (P.hurt > 0){
     c.fillStyle = '#ffc94d';
@@ -2219,6 +2239,21 @@ $('btnReset').onclick = () => {
     drawButterfly(sc, 120, 125, 1.9, 0, .45 + .55 * Math.abs(Math.sin(performance.now() / 260)), SKINS[0], performance.now() / 1000);
     requestAnimationFrame(loop);
   })();
+})();
+
+// ícono PNG generado en tiempo real (para navegadores sin soporte de favicon SVG)
+(function pngIcon(){
+  try{
+    const S = 180, ic = document.createElement('canvas'); ic.width = ic.height = S;
+    const c = ic.getContext('2d'), r = S * .22;
+    roundRect(c, 0, 0, S, S, r);
+    const g = c.createLinearGradient(0, 0, S, S); g.addColorStop(0, '#2a1f7a'); g.addColorStop(1, '#0c0a26');
+    c.fillStyle = g; c.fill();
+    drawButterfly(c, S * .46, S * .53, S / 150, 0, 1, SKINS[0], 1.2);
+    const url = ic.toDataURL('image/png');
+    const l = document.createElement('link'); l.rel = 'icon'; l.type = 'image/png'; l.sizes = '180x180'; l.href = url; document.head.appendChild(l);
+    $('appleIcon').href = url;
+  }catch(e){}
 })();
 
 // ---------- inicio ----------
