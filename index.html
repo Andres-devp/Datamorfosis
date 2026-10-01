@@ -95,7 +95,6 @@
   .menu-stats{display:grid;grid-template-columns:repeat(4,auto);gap:26px;margin-top:34px;width:max-content;max-width:100%}
   .stat .l{font-weight:700;font-size:10px;letter-spacing:.24em;color:var(--muted);display:flex;align-items:center;gap:6px}
   .stat .v{font-family:var(--display);font-size:30px;letter-spacing:.03em;line-height:1.05}
-  .menu-fs{position:absolute;top:calc(16px + var(--st));right:calc(16px + var(--sr));z-index:2}
   .menu-foot{position:absolute;left:calc(clamp(24px,5vw,72px) + var(--sl));bottom:calc(20px + var(--sb));font-size:10.5px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
 
   /* paneles */
@@ -111,8 +110,9 @@
   .pill b{font-family:var(--display);font-weight:400;font-size:26px;letter-spacing:.03em;line-height:1}
   .pill svg.i{font-size:18px}
   .c-bit{color:var(--gold)} .c-db{color:#6ee7ff}
-  .tabs{display:flex;gap:4px;margin:14px 0 18px}
-  .tabs button{font-family:var(--display);font-size:24px;letter-spacing:.08em;color:var(--muted);background:none;border:0;padding:6px 14px 4px;cursor:pointer;border-bottom:3px solid transparent;transition:color .2s}
+  .tabs{display:flex;gap:4px;margin:14px 0 18px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{flex:none;white-space:nowrap;font-family:var(--display);font-size:24px;letter-spacing:.08em;color:var(--muted);background:none;border:0;padding:6px 14px 4px;cursor:pointer;border-bottom:3px solid transparent;transition:color .2s}
   .tabs button:hover{color:#fff}
   .tabs button.on{color:#fff;border-image:var(--grad) 1}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
@@ -260,6 +260,105 @@
   @keyframes achIn{from{transform:translateX(110%)}to{transform:none}}
   @keyframes achOut{to{transform:translateX(110%)}}
 
+  /* ---------- progresión ---------- */
+  .c-par{color:#ff9bd6}
+  .has-dot{position:relative}
+  .has-dot::after{content:"";position:absolute;top:8px;right:10px;width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px rgba(12,10,38,.8),0 0 10px var(--red);animation:dotPulse 1.4s ease-in-out infinite}
+  .mbtn.has-dot::after{top:50%;margin-top:-5px;right:16px}
+  @keyframes dotPulse{50%{transform:scale(1.35)}}
+  .lvlbox{width:min(380px,100%);margin:0 0 14px}
+  .lvl-top{display:flex;align-items:baseline;gap:10px;font-weight:800;font-size:11px;letter-spacing:.16em;color:var(--muted)}
+  .lvl-n{color:#fff}
+  .lvl-n b{font-family:var(--display);font-weight:400;font-size:26px;letter-spacing:.04em;margin-left:4px;color:var(--gold)}
+  .lvl-rank{text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lvl-ver{margin-left:auto;color:#ff9bd6;white-space:nowrap}
+  .xpbar{height:8px;background:rgba(255,255,255,.12);transform:skewX(-20deg);overflow:hidden;margin-top:5px}
+  .xpbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffc94d,#f062b0);box-shadow:0 0 10px rgba(255,201,77,.6);transition:width .6s ease}
+  .lvl-xp{font-size:9.5px;font-weight:700;letter-spacing:.14em;color:var(--muted);margin-top:4px;text-align:right}
+  .mbtn.boxbtn{background:linear-gradient(90deg,rgba(255,201,77,.28),rgba(240,98,176,.22));box-shadow:inset 0 0 0 1px rgba(255,201,77,.6);animation:boxGlow 1.6s ease-in-out infinite}
+  .mbtn.boxbtn svg.i{color:var(--gold);opacity:1}
+  .mbtn .cnt{margin-left:auto;font-size:.8em;background:var(--gold);color:#2a1a00;padding:2px 10px 0;clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)}
+  @keyframes boxGlow{50%{box-shadow:inset 0 0 0 1px rgba(255,201,77,.95),0 0 18px rgba(255,201,77,.35)}}
+  .menu-tr{position:absolute;top:calc(16px + var(--st));right:calc(16px + var(--sr));z-index:2;display:flex;gap:8px}
+
+  /* misiones */
+  .mis{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:8px 10px;background:rgba(12,10,38,.45);box-shadow:inset 0 0 0 1px var(--line);margin-top:6px;
+    clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
+  .mis-ic{width:30px;height:30px;display:grid;place-items:center;font-size:16px;color:#c9bbff;background:rgba(123,92,240,.22)}
+  .mis-t{font-weight:700;font-size:12.5px;line-height:1.25}
+  .mis-bar{height:5px;background:rgba(255,255,255,.12);margin-top:5px;overflow:hidden}
+  .mis-bar i{display:block;height:100%;background:var(--grad)}
+  .mis-r{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-family:var(--display);font-size:19px;letter-spacing:.03em;white-space:nowrap}
+  .mis-r small{font-family:var(--ui);font-weight:700;font-size:10px;color:var(--muted)}
+  .mis-r span{display:flex;align-items:center;gap:4px}
+  .mis.done{box-shadow:inset 0 0 0 1px rgba(63,224,176,.5);background:rgba(63,224,176,.1)}
+  .mis.done .mis-ic{color:var(--mint);background:rgba(63,224,176,.18)}
+  .card.mis-card{grid-column:1/-1;display:block}
+  .mis-head{display:flex;gap:14px;align-items:center;padding-bottom:8px}
+  .mis-head>svg.i{font-size:34px;color:var(--gold)}
+  .mis-head>div{flex:1}
+  .mis-head b{font-family:var(--display);font-weight:400;font-size:24px;letter-spacing:.05em}
+  .mis-head small{display:block;font-size:11px;color:var(--muted);margin-top:5px}
+  .mis-foot{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.4}
+  #mhud{position:fixed;top:calc(14px + var(--st));left:50%;transform:translateX(-50%);z-index:11;pointer-events:none;display:flex;flex-direction:column;gap:3px;align-items:center;
+    padding:8px 14px;background:rgba(12,10,38,.55);clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);animation:fade .4s;max-width:min(440px,46vw)}
+  #mhud .mh-k{display:flex;align-items:center;gap:6px;font-weight:800;font-size:9.5px;letter-spacing:.26em;color:var(--gold)}
+  #mhud .mh{display:flex;align-items:center;gap:7px;font-weight:700;font-size:11.5px;line-height:1.25}
+  #mhud .mh svg.i{font-size:13px;color:#c9bbff}
+  #mhud em{font-style:normal;color:var(--muted)}
+
+  /* resultados: nivel y misiones */
+  .xprow{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .xprow .xr-l{font-weight:800;font-size:11px;letter-spacing:.16em;color:var(--muted);white-space:nowrap}
+  .xprow .xr-l b{font-family:var(--display);font-weight:400;font-size:22px;color:var(--gold);margin-left:3px}
+  .xprow .xpbar{flex:1;margin-top:0}
+  .xprow em{font-style:normal;font-weight:800;font-size:11px;letter-spacing:.1em;color:var(--gold);white-space:nowrap}
+  .rmis{margin-top:4px}
+  .rmis .mis{padding:6px 8px;grid-template-columns:26px 1fr auto}
+  .rmis .mis-ic{width:26px;height:26px;font-size:14px}
+  .rmis .mis-t{font-size:11.5px}
+
+  /* laboratorio */
+  .card.prest{grid-column:1/-1;background:linear-gradient(120deg,rgba(240,98,176,.2),rgba(79,107,255,.18));box-shadow:inset 0 0 0 1px rgba(240,98,176,.45)}
+  .card.prest .ico,.card.lab .ico{background:linear-gradient(135deg,rgba(240,98,176,.45),rgba(123,92,240,.35))}
+  .card.lab .lvl span.on{background:#ff9bd6;box-shadow:0 0 8px rgba(255,155,214,.6)}
+  .goal-sum{grid-column:1/-1;display:flex;align-items:center;gap:10px;font-weight:800;font-size:12px;letter-spacing:.16em;color:var(--muted)}
+  .goal-sum b{font-family:var(--display);font-weight:400;font-size:26px;color:var(--gold);letter-spacing:.04em}
+  .goal-sum svg.i{font-size:22px;color:var(--gold)}
+
+  /* caja de datos */
+  .box-panel{text-align:center}
+  .box-stage{position:relative;height:220px;display:grid;place-items:center;margin-top:8px}
+  .box-big{width:150px;height:150px;border:0;background:radial-gradient(circle,rgba(255,201,77,.35),rgba(255,201,77,0) 70%);color:var(--gold);cursor:pointer;display:grid;place-items:center;
+    animation:boxIdle 1.8s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(255,201,77,.6))}
+  .box-big svg.i{font-size:110px;stroke-width:1.6}
+  .box-big.shake{animation:boxShake .65s ease-in}
+  .box-big.gone{animation:boxGone .3s ease forwards}
+  @keyframes boxIdle{50%{transform:translateY(-8px) rotate(-3deg)}}
+  @keyframes boxShake{0%{transform:none}20%{transform:rotate(-10deg) scale(1.05)}40%{transform:rotate(10deg) scale(1.1)}60%{transform:rotate(-12deg) scale(1.15)}80%{transform:rotate(12deg) scale(1.22)}100%{transform:scale(1.35);filter:brightness(2) drop-shadow(0 0 40px #fff)}}
+  @keyframes boxGone{to{transform:scale(1.8);opacity:0}}
+  .box-res{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;animation:bigIn .45s cubic-bezier(.2,1.5,.4,1)}
+  .box-res .br-rar{font-weight:800;font-size:11px;letter-spacing:.34em;padding:5px 12px 4px;background:rgba(255,255,255,.1)}
+  .box-res .br-ic{font-size:64px;color:#fff}
+  .box-res .br-txt{font-family:var(--display);font-size:42px;letter-spacing:.03em;line-height:1}
+  .box-res .br-sub{font-weight:800;font-size:12px;letter-spacing:.18em;color:var(--muted)}
+  .box-res.com .br-ic{color:var(--gold)}
+  .box-res.rare .br-rar{background:rgba(110,231,255,.18);color:#bff4ff}.box-res.rare .br-ic{color:#6ee7ff}
+  .box-res.epic .br-rar{background:rgba(157,139,255,.28);color:#e2d9ff}.box-res.epic .br-ic{color:#b9a8ff;filter:drop-shadow(0 0 16px #9d8bff)}
+  .box-res.leg .br-rar{background:linear-gradient(90deg,#ffc94d,#f062b0);color:#2a1a00}.box-res.leg .br-ic{color:#ffe7ad;filter:drop-shadow(0 0 20px #ffc94d)}
+
+  /* bono diario */
+  .dgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:16px}
+  .dtile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;background:rgba(12,10,38,.5);box-shadow:inset 0 0 0 1px var(--line);text-align:center;
+    clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
+  .dtile .dt-d{font-weight:800;font-size:9.5px;letter-spacing:.16em;color:var(--muted)}
+  .dtile .dt-ic{font-size:24px;color:#c9bbff}
+  .dtile .dt-v{font-weight:700;font-size:10px;line-height:1.25}
+  .dtile.got{opacity:.5}.dtile.got .dt-ic{color:var(--mint)}
+  .dtile.now{background:linear-gradient(160deg,rgba(255,201,77,.3),rgba(240,98,176,.25));box-shadow:inset 0 0 0 2px var(--gold);animation:boxGlow 1.6s ease-in-out infinite}
+  .dtile.now .dt-ic{color:var(--gold)}
+  .dtile:last-child .dt-ic{color:var(--pink)}
+
   /* ---------- celular vertical ---------- */
   @media (max-width:760px){
     #scrMenu{background:linear-gradient(180deg,rgba(12,10,38,.85) 0%,rgba(12,10,38,.3) 38%,rgba(12,10,38,.4) 55%,rgba(12,10,38,.92) 100%);justify-content:space-between;align-items:center;text-align:center;
@@ -273,7 +372,12 @@
     .menu-stats{grid-template-columns:repeat(2,auto);gap:10px 28px;margin:14px auto 0}
     .stat .v{font-size:24px}
     .menu-foot{left:0;right:0;text-align:center;bottom:calc(14px + var(--sb));font-size:9px;padding:0 12px}
-    .menu-fs{top:calc(10px + var(--st));right:calc(10px + var(--sr))}
+    .menu-tr{top:calc(10px + var(--st));right:calc(10px + var(--sr))}
+    .lvlbox{margin:0 auto 10px}
+    .dgrid{grid-template-columns:repeat(4,1fr)}
+    #mhud{top:calc(104px + var(--st));left:auto;right:calc(12px + var(--sr));transform:none;align-items:flex-end;text-align:right;max-width:66vw}
+    #mhud .mh{flex-direction:row-reverse}
+    .tabs button{font-size:19px;padding:6px 9px 4px}
     .res{grid-template-columns:1fr}
     .grade{flex-direction:row;gap:16px;padding:10px}
     .grade .gv{font-size:100px}
@@ -334,7 +438,25 @@
     .stat .l{font-size:8.5px;letter-spacing:.2em}
     .stat .v{font-size:20px}
     .menu-foot{display:none}
-    .menu-fs{top:calc(10px + var(--st));right:calc(10px + var(--sr))}
+    .menu-tr{top:calc(10px + var(--st));right:calc(10px + var(--sr))}
+    .lvlbox{margin:8px 0 0;width:min(360px,100%)}
+    .lvl-xp{display:none}
+    .lvl-n b{font-size:21px}
+    .menu-nav{margin-top:8px}
+    .mbtn.boxbtn{grid-column:1/-1}
+    .box-stage{height:130px;margin-top:0}
+    .box-big{width:110px;height:110px}
+    .box-big svg.i{font-size:76px}
+    .box-res .br-ic{font-size:40px}
+    .box-res .br-txt{font-size:32px}
+    .dgrid{gap:5px;margin-top:8px}
+    .dtile{padding:6px 2px;gap:3px}
+    .dtile .dt-ic{font-size:18px}
+    .dtile .dt-v{font-size:9px}
+    #mhud{top:calc(8px + var(--st));left:50%;right:auto;transform:translateX(-50%);align-items:center;text-align:center;max-width:44vw;padding:6px 10px}
+    #mhud .mh{flex-direction:row}
+    #mhud .mh{font-size:10.5px}
+    .xprow{margin-top:6px}
 
     #scrSplash{gap:8px}
     #scrSplash .s-logo{width:84px;height:84px}
@@ -434,7 +556,12 @@
     <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></symbol>
     <symbol id="i-wing" viewBox="0 0 24 24"><path d="M12 7v13M12 10C9.5 4 3 4.5 3 9.5c0 3 3 4 6 4-3 1-3.8 5-.8 5.8 2 .5 3.8-2 3.8-4.8M12 10c2.5-6 9-5.5 9-.5 0 3-3 4-6 4 3 1 3.8 5 .8 5.8-2 .5-3.8-2-3.8-4.8"/></symbol>
     <symbol id="i-brain" viewBox="0 0 24 24"><circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.7 7l3.6 3.8M6.7 17l3.6-3.8M13.7 10.8L17.3 7M13.7 13.2l3.6 3.8"/></symbol>
-    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M12 2.5l8.5 4.5v10L12 21.5 3.5 17V7z"/><path d="M3.5 7L12 11.5 20.5 7M12 11.5v10"/><path d="M7.8 4.8l8.4 4.5"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4.5" rx="1"/><path d="M5 12.5V21h14v-8.5M12 8v13"/><path d="M12 8C10.5 4 6.5 4 7 6.5 7.4 8 12 8 12 8zM12 8c1.5-4 5.5-4 5-1.5C16.6 8 12 8 12 8z"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7.5 15h9"/></symbol>
+    <symbol id="i-level" viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21.1l1.4-7L2 9.3l7-.8z"/><path d="M12 8.5v6M9.5 11l2.5-2.5 2.5 2.5"/></symbol>
+    <symbol id="i-expand"viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
     <symbol id="i-compress" viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></symbol>
     <symbol id="i-trash"viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/></symbol>
   </defs>
@@ -473,6 +600,7 @@
   <button class="cbtn" id="bTurbo"><svg class="i"><use href="#i-chip"/></svg><span>TURBO</span></button>
 </div>
 <div id="prompt" class="hidden"></div>
+<div id="mhud" class="hidden"></div>
 <div id="notes"></div>
 <div id="big"></div>
 <div id="ach"></div>
@@ -503,19 +631,28 @@
 
 <!-- Menú principal -->
 <div id="scrMenu" class="screen hidden">
-  <button class="ibtn bFs menu-fs" title="Pantalla completa (F)"><svg class="i"><use href="#i-expand"/></svg></button>
+  <div class="menu-tr">
+    <button class="ibtn" data-act="settings" title="Ajustes"><svg class="i"><use href="#i-gear"/></svg></button>
+    <button class="ibtn bFs" title="Pantalla completa (F)"><svg class="i"><use href="#i-expand"/></svg></button>
+  </div>
   <div class="menu-brand">
     <div class="brand-kick">GRUPO ESTUDIANTIL</div>
     <h1 class="brand-title">DATAMORFOSIS</h1>
     <div class="brand-sub">VUELO DE DATOS</div>
   </div>
   <div>
+    <div class="lvlbox">
+      <div class="lvl-top"><span class="lvl-n">NIVEL <b id="mLvl">1</b></span><span class="lvl-rank" id="mRank">Becario</span><span class="lvl-ver" id="mVer">MODELO v1</span></div>
+      <div class="xpbar"><i id="mXp"></i></div>
+      <div class="lvl-xp" id="mXpTxt">0 / 0 XP</div>
+    </div>
     <nav class="menu-nav">
       <button class="mbtn primary" data-act="play"><svg class="i"><use href="#i-play"/></svg>JUGAR<kbd>ESPACIO</kbd></button>
+      <button class="mbtn boxbtn hidden" id="mBoxBtn" data-act="boxes"><svg class="i"><use href="#i-box"/></svg>ABRIR CAJAS<span class="cnt" id="mBoxN">0</span></button>
       <button class="mbtn" data-act="upg"><svg class="i"><use href="#i-wrench"/></svg>TALLER</button>
+      <button class="mbtn" data-act="mis"><svg class="i"><use href="#i-target"/></svg>MISIONES</button>
       <button class="mbtn" data-act="skin"><svg class="i"><use href="#i-palette"/></svg>ESTILOS</button>
       <button class="mbtn" data-act="goal"><svg class="i"><use href="#i-trophy"/></svg>LOGROS</button>
-      <button class="mbtn" data-act="settings"><svg class="i"><use href="#i-gear"/></svg>AJUSTES</button>
     </nav>
     <div class="menu-stats">
       <div class="stat"><div class="l"><svg class="i"><use href="#i-flag"/></svg>RÉCORD</div><div class="v"><span id="mBest">0</span> M</div></div>
@@ -524,7 +661,7 @@
       <div class="stat"><div class="l"><svg class="i c-db"><use href="#i-db"/></svg>DATASETS</div><div class="v" id="mCry">0</div></div>
     </div>
   </div>
-  <div class="menu-foot">Hecho por AÑA GAMES · Grupo Estudiantil Datamorfosis · v2.1</div>
+  <div class="menu-foot">Hecho por AÑA GAMES · Grupo Estudiantil Datamorfosis · v3.0</div>
 </div>
 
 <!-- Tienda -->
@@ -535,10 +672,13 @@
       <div class="wallet">
         <div class="pill"><svg class="i c-bit"><use href="#i-bit"/></svg><b id="sBits">0</b></div>
         <div class="pill"><svg class="i c-db"><use href="#i-db"/></svg><b id="sCry">0</b></div>
+        <div class="pill" id="sParW"><svg class="i c-par"><use href="#i-flask"/></svg><b id="sPar">0</b></div>
       </div>
     </div>
     <div class="tabs" id="tabs">
       <button data-tab="upg" class="on">TALLER</button>
+      <button data-tab="lab">LABORATORIO</button>
+      <button data-tab="mis">MISIONES</button>
       <button data-tab="skin">ESTILOS</button>
       <button data-tab="goal">LOGROS</button>
     </div>
@@ -568,6 +708,8 @@
           <div class="row total"><span>Total bits <em id="rMult" style="font-style:normal;color:var(--pink)">×1</em></span><b id="rTotal">0</b></div>
         </div>
         <div class="tags" id="rTags"></div>
+        <div class="xprow"><span class="xr-l">NIVEL <b id="rLvl">1</b></span><div class="xpbar"><i id="rXp"></i></div><em id="rXpGain">+0 XP</em></div>
+        <div class="rmis" id="rMis"></div>
       </div>
     </div>
     <div class="p-foot">
@@ -603,6 +745,27 @@
       <button class="btn danger" id="btnReset"><svg class="i"><use href="#i-trash"/></svg><span id="resetTxt">BORRAR PROGRESO</span></button>
       <button class="btn primary" id="btnSetClose"><svg class="i"><use href="#i-check"/></svg>LISTO</button>
     </div>
+  </div>
+</div>
+
+<!-- Caja de datos -->
+<div id="scrBox" class="screen dim center hidden" style="z-index:36">
+  <div class="panel box-panel" style="max-width:420px">
+    <div class="p-kick" id="boxKick">RECOMPENSA</div><div class="p-title" id="boxTitle">CAJA DE DATOS</div>
+    <div class="box-stage">
+      <button class="box-big" id="boxBig" aria-label="Abrir caja"><svg class="i"><use href="#i-box"/></svg></button>
+      <div class="box-res hidden" id="boxRes"></div>
+    </div>
+    <div class="p-foot" style="justify-content:center"><button class="btn primary" id="btnBox">ABRIR</button></div>
+  </div>
+</div>
+
+<!-- Recompensa diaria -->
+<div id="scrDaily" class="screen dim center hidden" style="z-index:37">
+  <div class="panel" style="max-width:640px">
+    <div class="p-kick" id="dailyStreak">RECOMPENSA DIARIA</div><div class="p-title">BONO DIARIO</div>
+    <div class="dgrid" id="dailyGrid"></div>
+    <div class="p-foot" style="justify-content:center"><button class="btn primary" id="btnDaily"><svg class="i"><use href="#i-gift"/></svg>RECLAMAR</button></div>
   </div>
 </div>
 
@@ -660,80 +823,141 @@ const MOON_ALT = 1000;   // metros
 const CELL = 800;
 const PAD_X = -40, PAD_Y = 228;
 
+// Mejoras: muchos niveles con efecto repartido (el nivel máximo rinde como antes).
+// Costo polinómico base·(L+1)^p·g^L: sigue el ritmo de las ganancias (calibrado con simulación: ~150 vuelos para maxear).
+// Los primeros niveles son baratos para enganchar; los últimos son la meta de largo plazo.
+const kmh = v => Math.round(v / PXM * 3.6) + ' km/h';
 const UPG = [
-  { id:'catapulta', name:'Learning Rate',      icon:'i-rocket',  desc:'Más potencia en el lanzamiento.',     max:8, base:40,  val:L => Math.round((1150 + 340 * L) / PXM * 3.6) + ' km/h' },
-  { id:'alas',      name:'Optimizador Adam',   icon:'i-feather', desc:'Menos arrastre y planeo más largo.',  max:6, base:60,  val:L => 'Planeo ' + (100 + 60 * L) + '%' },
-  { id:'nectar',    name:'Aleteos Extra',      icon:'i-wing',    desc:'Más saltos en el aire en cada vuelo.', max:6, base:50,  val:L => (1 + L) + (L ? ' aleteos' : ' aleteo') },
-  { id:'turbo',     name:'GPU Turbo',          icon:'i-chip',    desc:'Propulsor: mantén Shift o el botón.', max:7, base:100, val:L => L ? (0.8 + 0.32 * L).toFixed(2) + ' s' : 'Bloqueado' },
-  { id:'rebote',    name:'Backpropagation',    icon:'i-bounce',  desc:'Cada rebote conserva más energía.',   max:6, base:60,  val:L => Math.round((0.45 + 0.06 * L) * 100) + '%' },
-  { id:'iman',      name:'Minería de Datos',   icon:'i-magnet',  desc:'Atrae bits y datasets cercanos.',     max:5, base:80,  val:L => L ? 'Radio ' + (80 + 60 * L) : 'Inactivo' },
-  { id:'escudo',    name:'Validación Cruzada', icon:'i-shield',  desc:'Bloquea enemigos en cada vuelo.',     max:3, base:200, val:L => L + (L === 1 ? ' escudo' : ' escudos') },
-  { id:'bigdata',   name:'Big Data',           icon:'i-bars',    desc:'Multiplica los bits ganados.',        max:5, base:250, val:L => '×' + (1 + 0.25 * L).toFixed(2) },
+  { id:'catapulta', name:'Learning Rate',      icon:'i-rocket',  desc:'Más potencia en el lanzamiento.',      max:15, base:30,  p:2.6, g:1.12, val:L => kmh(1150 + 185 * L) },
+  { id:'alas',      name:'Optimizador Adam',   icon:'i-feather', desc:'Menos arrastre y planeo más largo.',   max:12, base:40,  p:2.6, g:1.12, val:L => 'Planeo ' + (100 + 30 * L) + '%' },
+  { id:'nectar',    name:'Aleteos Extra',      icon:'i-wing',    desc:'Más saltos en el aire en cada vuelo.', max:8,  base:70,  p:2.8, g:1.14, val:L => (1 + L) + (L ? ' aleteos' : ' aleteo') },
+  { id:'turbo',     name:'GPU Turbo',          icon:'i-chip',    desc:'Propulsor: mantén Shift o el botón.',  max:12, base:150, p:2.6, g:1.12, val:L => L ? (0.6 + 0.2 * L).toFixed(1) + ' s' : 'Bloqueado' },
+  { id:'rebote',    name:'Backpropagation',    icon:'i-bounce',  desc:'Cada rebote conserva más energía.',    max:10, base:50,  p:2.6, g:1.12, val:L => Math.round((0.45 + 0.036 * L) * 100) + '%' },
+  { id:'iman',      name:'Minería de Datos',   icon:'i-magnet',  desc:'Atrae bits y datasets cercanos.',      max:8,  base:100, p:2.6, g:1.12, val:L => L ? 'Radio ' + (80 + 38 * L) : 'Inactivo' },
+  { id:'escudo',    name:'Validación Cruzada', icon:'i-shield',  desc:'Bloquea enemigos en cada vuelo.',      max:4,  base:500, p:3.0, g:1.25, val:L => L + (L === 1 ? ' escudo' : ' escudos') },
+  { id:'bigdata',   name:'Big Data',           icon:'i-bars',    desc:'Multiplica los bits ganados.',         max:10, base:250, p:2.7, g:1.12, val:L => '×' + (1 + 0.15 * L).toFixed(2) },
 ];
-const upgCost = (u, L) => Math.round(u.base * Math.pow(1.7, L) / 5) * 5;
+const upgCost = (u, L) => { const c = u.base * Math.pow(L + 1, u.p) * Math.pow(u.g, L) * (1 - .06 * perk('pDisc')); return c < 1000 ? Math.round(c / 5) * 5 : Math.round(c / 50) * 50; };
+
+// Laboratorio: mejoras permanentes que se compran con Parámetros (se ganan al reentrenar el modelo)
+const LAB = [
+  { id:'pBits',    name:'Big Data Permanente',  icon:'i-bars',    desc:'Más bits en todos los vuelos, para siempre.',     max:10, cost:L => 1 + L,         val:L => '+' + 25 * L + '%' },
+  { id:'pStart',   name:'Transfer Learning',    icon:'i-brain',   desc:'Cada versión nueva empieza con Learning Rate y Adam mejorados.', max:5, cost:L => 2 + 2 * L, val:L => '+' + 2 * L + ' niveles' },
+  { id:'pPerfect', name:'Precisión Aumentada',  icon:'i-star',    desc:'Más margen para el lanzamiento PERFECTO.',        max:4,  cost:L => 1 + L,         val:L => '±' + (5 + 1.5 * L) + '°' },
+  { id:'pFlap',    name:'Aleteo Neural',        icon:'i-wing',    desc:'Aleteos extra permanentes en cada vuelo.',        max:3,  cost:L => 3 + 3 * L,     val:L => '+' + L },
+  { id:'pBox',     name:'Minería Profunda',     icon:'i-box',     desc:'Aparecen más cajas de datos en el cielo.',        max:5,  cost:L => 1 + L,         val:L => '+' + 40 * L + '%' },
+  { id:'pDisc',    name:'Ajuste de Hiperparámetros', icon:'i-wrench', desc:'Las mejoras del taller cuestan menos.',       max:5,  cost:L => 2 + 2 * L,     val:L => '−' + 6 * L + '%' },
+  { id:'pData',    name:'Datos Etiquetados',    icon:'i-db',      desc:'Aparecen más datasets durante el vuelo.',         max:4,  cost:L => 1 + 2 * L,     val:L => '+' + 30 * L + '%' },
+];
+const perk = id => (save && save.lab && save.lab[id]) || 0;
+const PRESTIGE_DIST = 1000;   // metros en un solo vuelo para poder reentrenar
+const prestigeGain = () => Math.floor(Math.sqrt((save.cycleBits || 0) / 12000));
 
 const SKINS = [
-  { id:'clasica',  name:'Datamorfosis', cost:0,  desc:'El diseño original del logo.', a:'#cdbfff', b:'#7b5cf0', hi:'#f1ecff', dot:'#8a6cf5', body:'#262063' },
-  { id:'menta',    name:'Tensor Menta', cost:15, desc:'Fresca como un modelo recién entrenado.', a:'#c4f7e3', b:'#33c08f', hi:'#f0fff9', dot:'#2fb889', body:'#163f3a' },
-  { id:'monarca',  name:'Pitón',        cost:25, desc:'Azul y amarillo, el lenguaje favorito.', a:'#ffe27a', b:'#3d6fd6', hi:'#fff6cf', dot:'#ffd23f', body:'#1d2b5c' },
-  { id:'neon',     name:'Neón Neural',  cost:40, desc:'Brilla como una red en inferencia.', a:'#8ff8ff', b:'#ff4fd8', hi:'#eafeff', dot:'#39e0ff', body:'#170f3d', glow:'#ff4fd8' },
-  { id:'arcoiris', name:'Espectro RGB', cost:60, desc:'Recorre todo el espacio de color.', rainbow:true, a:'#fff', b:'#fff', hi:'#ffffff', dot:'#fff', body:'#262063', glow:'#ffffff' },
-  { id:'lunar',    name:'Lunar',        cost:-1, desc:'Solo para quien toca la Luna de los Datos.', a:'#fff8d2', b:'#b9a8ff', hi:'#ffffff', dot:'#ffd85a', body:'#262063', glow:'#fff3a0' },
+  { id:'clasica',  name:'Datamorfosis', cost:0,   desc:'El diseño original del logo.', a:'#cdbfff', b:'#7b5cf0', hi:'#f1ecff', dot:'#8a6cf5', body:'#262063' },
+  { id:'menta',    name:'Tensor Menta', cost:20,  desc:'Fresca como un modelo recién entrenado.', a:'#c4f7e3', b:'#33c08f', hi:'#f0fff9', dot:'#2fb889', body:'#163f3a' },
+  { id:'monarca',  name:'Pitón',        cost:40,  desc:'Azul y amarillo, el lenguaje favorito.', a:'#ffe27a', b:'#3d6fd6', hi:'#fff6cf', dot:'#ffd23f', body:'#1d2b5c' },
+  { id:'neon',     name:'Neón Neural',  cost:65,  desc:'Brilla como una red en inferencia.', a:'#8ff8ff', b:'#ff4fd8', hi:'#eafeff', dot:'#39e0ff', body:'#170f3d', glow:'#ff4fd8' },
+  { id:'fuego',    name:'Gradiente de Fuego', cost:95, desc:'Explota cuando el learning rate es muy alto.', a:'#ffd27a', b:'#ff4f4f', hi:'#fff1d6', dot:'#ff8a3d', body:'#3a1020', glow:'#ff6a3d' },
+  { id:'arcoiris', name:'Espectro RGB', cost:130, desc:'Recorre todo el espacio de color.', rainbow:true, a:'#fff', b:'#fff', hi:'#ffffff', dot:'#fff', body:'#262063', glow:'#ffffff' },
+  { id:'galaxia',  name:'Galaxia Latente', cost:180, desc:'Un universo entero de dimensiones ocultas.', a:'#c7b8ff', b:'#2b1d7a', hi:'#ffffff', dot:'#ff7ad9', body:'#0d0830', glow:'#8a6cff' },
+  { id:'oro',      name:'Modelo de Oro', cost:260, desc:'Precisión, recall y F1 perfectos.', a:'#fff1a8', b:'#d49a1a', hi:'#fffbe6', dot:'#ffcf3d', body:'#3b2a06', glow:'#ffd84d' },
+  { id:'lunar',    name:'Lunar',        cost:-1,  desc:'Solo para quien toca la Luna de los Datos.', a:'#fff8d2', b:'#b9a8ff', hi:'#ffffff', dot:'#ffd85a', body:'#262063', glow:'#fff3a0' },
+  { id:'cuantica', name:'Cuántica',     cost:-2,  desc:'Exclusiva: aparece solo dentro de cajas de datos.', a:'#b8fff1', b:'#3d5afe', hi:'#ffffff', dot:'#00e5ff', body:'#0b1440', glow:'#00e5ff' },
+  { id:'glitch',   name:'Glitch',       cost:-2,  desc:'Exclusiva: aparece solo dentro de cajas de datos.', a:'#ff7ae6', b:'#2bd9ff', hi:'#ffffff', dot:'#7fffb0', body:'#140a2e', glow:'#ff4fd8' },
+  { id:'arquitecto', name:'Arquitecto IA', cost:-3, desc:'Se desbloquea al llegar al Modelo v3.', a:'#ffffff', b:'#f062b0', hi:'#ffffff', dot:'#4f6bff', body:'#1a1450', glow:'#f062b0' },
 ];
 
 const GOALS = [
-  { id:'d100',  txt:'Primer entrenamiento: vuela 100 m',     ic:'i-flag',   test:r => r.dist >= 100,  bits:50 },
-  { id:'a50',   txt:'Despegue: sube 50 m',                   ic:'i-alt',    test:r => r.maxAlt >= 50, bits:80 },
-  { id:'perf',  txt:'Precisión 100%: lanzamiento PERFECTO',  ic:'i-star',   test:r => r.perfect,       bits:100, cry:3 },
-  { id:'d300',  txt:'Vuela 300 m',                           ic:'i-flag',   test:r => r.dist >= 300,  bits:150 },
-  { id:'b8',    txt:'Backprop en acción: rebota 8 veces',    ic:'i-bounce', test:r => r.bounces >= 8, bits:200, cry:3 },
-  { id:'a150',  txt:'Alcanza la Capa Oculta (150 m)',        ic:'i-brain',  test:r => r.maxAlt >= 150, bits:300, cry:5 },
-  { id:'bits150', txt:'Recolecta 150 bits en un vuelo',      ic:'i-bit',    test:r => r.bits >= 150,  bits:400, cry:5 },
+  { id:'d100',  txt:'Primer entrenamiento: vuela 100 m',     ic:'i-flag',   test:r => r.dist >= 100,  bits:30 },
+  { id:'a50',   txt:'Despegue: sube 50 m',                   ic:'i-alt',    test:r => r.maxAlt >= 50, bits:40 },
+  { id:'perf',  txt:'Precisión 100%: lanzamiento PERFECTO',  ic:'i-star',   test:r => r.perfect,       bits:60, cry:3 },
+  { id:'d300',  txt:'Vuela 300 m',                           ic:'i-flag',   test:r => r.dist >= 300,  bits:100 },
+  { id:'b8',    txt:'Backprop en acción: rebota 8 veces',    ic:'i-bounce', test:r => r.bounces >= 8, bits:150, cry:3 },
+  { id:'a150',  txt:'Alcanza la Capa Oculta (150 m)',        ic:'i-brain',  test:r => r.maxAlt >= 150, bits:250, cry:5 },
+  { id:'lv5',   txt:'Analista: llega al nivel 5',            ic:'i-level',  test:r => r.level >= 5,    bits:300, cry:5 },
+  { id:'bits150', txt:'Recolecta 150 bits en un vuelo',      ic:'i-bit',    test:r => r.bits >= 150,  bits:300, cry:5 },
+  { id:'m10',   txt:'Completa 10 misiones',                  ic:'i-target', test:r => r.missions >= 10, bits:400, cry:8 },
   { id:'d750',  txt:'Vuela 750 m',                           ic:'i-flag',   test:r => r.dist >= 750,  bits:400, cry:5 },
+  { id:'f25',   txt:'Constancia: haz 25 vuelos',             ic:'i-cycle',  test:r => r.flights >= 25, bits:500, cry:8 },
   { id:'a350',  txt:'Explora el Espacio Latente (350 m)',    ic:'i-brain',  test:r => r.maxAlt >= 350, bits:800, cry:8 },
+  { id:'combo40', txt:'Batch gigante: combo de ×40 bits',    ic:'i-bit',    test:r => r.combo >= 40,   bits:800, cry:8 },
+  { id:'box10', txt:'Abre 10 cajas de datos',                ic:'i-box',    test:r => r.boxes >= 10,   bits:1000, cry:10 },
   { id:'d1500', txt:'Vuela 1.500 m',                         ic:'i-flag',   test:r => r.dist >= 1500, bits:1000, cry:10 },
+  { id:'lv15',  txt:'Científico de Datos: llega al nivel 15', ic:'i-level', test:r => r.level >= 15,   bits:2000, cry:15 },
   { id:'a600',  txt:'Atraviesa la Aurora de Datos (600 m)',  ic:'i-star',   test:r => r.maxAlt >= 600, bits:1500, cry:12 },
+  { id:'pre1',  txt:'Reentrena tu modelo por primera vez',   ic:'i-flask',  test:r => r.version >= 2,  bits:0, cry:20 },
   { id:'d3000', txt:'Vuela 3.000 m',                         ic:'i-trophy', test:r => r.dist >= 3000, bits:2500, cry:20 },
+  { id:'m50',   txt:'Completa 50 misiones',                  ic:'i-target', test:r => r.missions >= 50, bits:3000, cry:25 },
+  { id:'f100',  txt:'Obsesión: haz 100 vuelos',              ic:'i-cycle',  test:r => r.flights >= 100, bits:3000, cry:20 },
   { id:'moon',  txt:'Toca la Luna de los Datos (1000 m)',    ic:'i-moon',   test:r => r.maxAlt >= MOON_ALT, bits:5000, cry:50 },
+  { id:'pre3',  txt:'Arquitecto IA: llega al Modelo v3',     ic:'i-flask',  test:r => r.version >= 3,  bits:0, cry:40 },
+  { id:'d5000', txt:'Vuela 5.000 m',                         ic:'i-trophy', test:r => r.dist >= 5000, bits:8000, cry:40 },
+  { id:'lv30',  txt:'Leyenda: llega al nivel 30',            ic:'i-level',  test:r => r.level >= 30,   bits:10000, cry:60 },
+  { id:'pre5',  txt:'Singularidad: llega al Modelo v5',      ic:'i-flask',  test:r => r.version >= 5,  bits:0, cry:100 },
 ];
 
 const ZONES = [[0, 'Capa de Entrada'], [150, 'Capa Oculta'], [350, 'Espacio Latente'], [600, 'Aurora de Datos'], [850, 'Capa de Salida']];
 
+// ---------- nivel de investigador ----------
+const xpNeed = L => Math.round(50 + 34 * Math.pow(L, 1.32));
+const RANKS = [[1, 'Becario'], [3, 'Analista Junior'], [5, 'Analista de Datos'], [9, 'Científico de Datos'], [14, 'Ingeniero de ML'], [20, 'Investigador de IA'], [27, 'Arquitecto de IA'], [35, 'Leyenda de los Datos']];
+const rankOf = L => { let n = RANKS[0][1]; for (const [l, t] of RANKS) if (L >= l) n = t; return n; };
+
 // ---------- guardado ----------
 const SAVE_KEY = 'datamorfosis_vuelo_v1';
+const SAVE_V = 2;
 function defaultSave(){
-  return { bits:0, crystals:0, upg:Object.fromEntries(UPG.map(u => [u.id, 0])), skins:['clasica'], skin:'clasica',
-    goals:{}, bestDist:0, bestAlt:0, bestScore:0, flights:0, moon:false, musicVol:.7, sfxVol:.8, hint:false };
+  return { v:SAVE_V, bits:0, crystals:0, upg:Object.fromEntries(UPG.map(u => [u.id, 0])), skins:['clasica'], skin:'clasica',
+    goals:{}, bestDist:0, bestAlt:0, bestScore:0, flights:0, moon:false, musicVol:.7, sfxVol:.8, hint:false,
+    // progresión larga
+    lab:{}, params:0, version:1, cycleBits:0, cycleBest:0,
+    xp:0, level:1, missions:[], missionsDone:0, boxes:0, boxesOpened:0, daily:{ last:'', streak:0 },
+    avgEarn:0, avgBits:0, lifeBits:0, maxCombo:0 };
 }
+// mejoras viejas (v1) → escala nueva conservando la misma potencia relativa
+const OLD_MAX = { catapulta:8, alas:6, nectar:6, turbo:7, rebote:6, iman:5, escudo:3, bigdata:5 };
 function loadSave(){
   const d = defaultSave();
   try{
     const s = JSON.parse(localStorage.getItem(SAVE_KEY));
-    if (s && typeof s === 'object'){ Object.assign(d, s); d.upg = Object.assign(defaultSave().upg, s.upg || {}); }
+    if (s && typeof s === 'object'){
+      Object.assign(d, s); d.upg = Object.assign(defaultSave().upg, s.upg || {});
+      if ((s.v || 1) < 2){
+        for (const u of UPG) d.upg[u.id] = Math.min(u.max, Math.round((d.upg[u.id] || 0) / OLD_MAX[u.id] * u.max));
+        d.cycleBest = d.bestDist || 0; d.cycleBits = Math.round((d.bits || 0) + (d.flights || 0) * 300);
+        d.v = SAVE_V;
+      }
+    }
   }catch(e){}
   if (typeof d.musicVol !== 'number') d.musicVol = .7;
   if (typeof d.sfxVol !== 'number') d.sfxVol = .8;
+  if (!Array.isArray(d.missions)) d.missions = [];
+  if (!d.daily || typeof d.daily !== 'object') d.daily = { last:'', streak:0 };
+  if (!d.lab || typeof d.lab !== 'object') d.lab = {};
   return d;
 }
 let save = loadSave();
 function persist(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){} }
 
 function stats(){
-  const u = save.upg;
+  const u = save.upg, pp = perk('pPerfect');
   return {
-    launch: 1150 + 340 * u.catapulta,
-    drag: 0.10 - 0.012 * u.alas,
-    lift: 0.35 + 0.22 * u.alas,
-    flaps: 1 + u.nectar,
+    launch: 1150 + 185 * u.catapulta,
+    drag: 0.10 - 0.0062 * u.alas,
+    lift: 0.35 + 0.11 * u.alas,
+    flaps: 1 + u.nectar + perk('pFlap'),
     flapPow: 620,
-    fuel: u.turbo ? 0.8 + 0.32 * u.turbo : 0,
-    turboAcc: 1450 + 190 * u.turbo,
-    bounce: 0.45 + 0.06 * u.rebote,
-    keep: 0.8 + 0.025 * u.rebote,
-    roll: 820 - 70 * u.rebote,
-    magnet: u.iman ? 80 + 60 * u.iman : 0,
+    fuel: u.turbo ? 0.6 + 0.2 * u.turbo : 0,
+    turboAcc: 1450 + 110 * u.turbo,
+    bounce: 0.45 + 0.036 * u.rebote,
+    keep: 0.8 + 0.015 * u.rebote,
+    roll: 820 - 42 * u.rebote,
+    magnet: u.iman ? 80 + 38 * u.iman : 0,
     shields: u.escudo,
-    mult: 1 + 0.25 * u.bigdata,
+    mult: (1 + 0.15 * u.bigdata) * (1 + 0.25 * perk('pBits')),
+    perfAng: 5 + 1.5 * pp, perfPow: .92 - .02 * pp,
+    boxMul: 1 + .4 * perk('pBox'), dataMul: 1 + .3 * perk('pData'),
   };
 }
 let ST = stats();
@@ -1077,7 +1301,8 @@ function genCell(cx, cy){
       o.push({ t:'coin', x:px + dx, y:Math.max(34, py + dy), r:13, v:cvv, ph:R() * 6 });
     }
   }
-  if (R() < .085) o.push({ t:'dataset', x:rx(), y:ry(90), r:16, ph:R() * 6 });
+  if (R() < .085 * ST.dataMul) o.push({ t:'dataset', x:rx(), y:ry(90), r:16, ph:R() * 6 });
+  if (cx > 2 && R() < .03 * ST.boxMul) o.push({ t:'box', x:rx(), y:ry(120), r:20, ph:R() * 6 });
   if (R() < .2 && cx > 0) o.push({ t:'neuron', x:rx(), y:ry(140), r:18, ph:R() * 6 });
   if (cy === 0){
     const nm = (R() < .62 ? 1 : 0) + (R() < .28 ? 1 : 0);
@@ -1154,21 +1379,28 @@ function resetPlayer(){
 }
 function goMenu(){
   state = 'MENU'; paused = false; ST = stats(); resetPlayer(); A.setTrack('menu'); A.setPaused(false); A.setTurbo(false);
-  showScreen('scrMenu'); $('hud').classList.add('hidden'); $('ctrl').classList.add('hidden'); setPrompt('');
-  $('mBest').textContent = fmt(save.bestDist); $('mAlt').textContent = fmt(save.bestAlt);
-  $('mBits').textContent = fmt(save.bits); $('mCry').textContent = fmt(save.crystals);
+  showScreen('scrMenu'); $('hud').classList.add('hidden'); $('ctrl').classList.add('hidden'); setPrompt(''); $('mhud').classList.add('hidden');
+  fillMissions(); refreshMenuInfo();
+  setTimeout(() => { if (state === 'MENU' && $('scrBox').classList.contains('hidden')) checkDaily(); }, 600);
 }
 function startAim(){
   A.init(); SFX.ui(); A.setTrack('flight'); A.setPaused(false);
   ST = stats(); state = 'AIM'; paused = false; runSeed = (Math.random() * 1e9) | 0; cells = new Map(); parts = [];
   resetPlayer();
-  RUN = { dist:0, maxAlt:0, bits:0, cry:0, bounces:0, perfect:false, combo:0, comboT:0, moon:false, goals:[], zone:0, biome:0, tier:'' };
+  RUN = { dist:0, maxAlt:0, bits:0, cry:0, bounces:0, perfect:false, combo:0, comboT:0, moon:false, goals:[], zone:0, biome:0, tier:'',
+    maxCombo:0, rings:0, pops:0, deploys:0, boxes:0, hitDist:-1, flapDist:-1, missions:[] };
   aim.phase = 0; aim.t = Math.random() * 3; aim.t2 = 0; aim.pull = 0;
   showScreen(null); $('hud').classList.remove('hidden'); $('ctrl').classList.add('hidden');
   $('mGpu').style.display = ST.fuel > 0 ? '' : 'none';
   $('mShield').style.display = ST.shields > 0 ? '' : 'none';
   setPrompt(`${KEY} FIJA EL ÁNGULO`);
   hudCache = {};
+  // recordatorio de misiones mientras apuntas
+  fillMissions();
+  $('mhud').innerHTML = `<div class="mh-k">${icon('i-target')}MISIONES</div>` + save.missions.map(m => {
+    const M = MISSIONS[m.t]; return `<div class="mh">${icon(M.ic)}<span>${M.txt(m.n)}${M.per ? '' : ` <em>${fmt(Math.floor(m.p))}/${fmt(m.n)}</em>`}</span></div>`;
+  }).join('');
+  $('mhud').classList.remove('hidden');
 }
 function aimClick(){
   if (aim.phase === 0){
@@ -1182,7 +1414,7 @@ function launch(){
   let tier = 'OK', level = 0, mult = 1, hyper = 0;
   // bono modesto sin mejoras; el hiperimpulso solo aparece al mejorar Learning Rate
   const lr = save.upg.catapulta;
-  if (ae <= 5 && p >= .92){ tier = 'PERFECTO'; level = 3; mult = 1.08 + .015 * lr; hyper = .07 * lr; }
+  if (ae <= ST.perfAng && p >= ST.perfPow){ tier = 'PERFECTO'; level = 3; mult = 1.08 + .015 * lr; hyper = .07 * lr; }
   else if (score >= .8){ tier = 'GENIAL'; level = 2; mult = 1.05 + .01 * lr; hyper = .03 * lr; }
   else if (score >= .62){ tier = 'BIEN'; level = 1; mult = 1.03; }
   const sp = ST.launch * (.55 + .45 * p) * mult;
@@ -1200,13 +1432,14 @@ function launch(){
   if (level === 3) bigCallout('PERFECTO', hyper > 0 ? 'HIPERIMPULSO' : 'LANZAMIENTO ÓPTIMO', false, true);
   else if (level === 2) note('Gran lanzamiento', 'good', 'i-star');
   else if (level === 1) note('Buen lanzamiento', 'good', 'i-check');
-  setPrompt(''); $('ctrl').classList.remove('hidden');
+  setPrompt(''); $('ctrl').classList.remove('hidden'); $('mhud').classList.add('hidden');
   $('bFlap').classList.toggle('hidden', !IS_TOUCH);
   $('bTurbo').classList.toggle('hidden', ST.fuel <= 0);
   if (!save.hint) setTimeout(() => { if (state === 'FLIGHT' && !save.hint){ setPrompt(`${KEY} ALETEA EN EL AIRE`); setTimeout(() => { if (state === 'FLIGHT') setPrompt(''); }, 2200); } }, 900);
 }
 function doFlap(){
   if (state !== 'FLIGHT' || paused || P.flaps <= 0) return;
+  if (RUN.flapDist < 0) RUN.flapDist = Math.max(0, P.x / PXM);
   P.flaps--; P.vy = Math.max(P.vy, 0) + ST.flapPow; P.vx += P.vx < 250 ? 220 : 80;
   P.flapBoost = .45; P.sq = .72; P.onGround = false; P.stopT = 0;
   SFX.flap(); shockwave(P.x, P.y, '#c9bbff', 70);
@@ -1216,53 +1449,79 @@ function doFlap(){
 function endFlight(){
   state = 'RESULTS'; input.turbo = false; A.setTurbo(false); A.setTrack('results');
   $('ctrl').classList.add('hidden'); setPrompt('');
-  const r = RUN;
+  const r = RUN, lv0 = save.level - (RUN.levels || 0);
   r.dist = Math.max(0, P.x / PXM);
+  // logros y misiones del vuelo (antes de contarlo)
+  checkGoals(); missionTick();
+  for (const m of save.missions){ const M = MISSIONS[m.t]; if (!M.per && m.born <= save.flights) m.p += M.val(r); }
   const bonus = Math.floor(r.dist / 2) + Math.floor(r.maxAlt / 2);
   const total = Math.round((r.bits + bonus) * ST.mult);
+  const prevBest = save.bestDist;
   const recD = r.dist > save.bestDist, recA = r.maxAlt > save.bestAlt;
   const score = r.dist + r.maxAlt * 1.5, ratio = score / Math.max(120, save.bestScore || 0);
   const grade = ratio >= 1 ? 'S' : ratio >= .8 ? 'A' : ratio >= .6 ? 'B' : ratio >= .4 ? 'C' : 'D';
   const gtxt = { S:'NUEVO MÁXIMO', A:'GRAN VUELO', B:'BUEN AJUSTE', C:'SIGUE ENTRENANDO', D:'SUBAJUSTADO' }[grade];
-  save.bits += total; save.crystals += r.cry; save.flights++;
+  give(total, r.cry); save.flights++; r.counted = true;
+  save.avgEarn = save.avgEarn ? save.avgEarn * .7 + total * .3 : total;
+  save.avgBits = save.avgBits ? save.avgBits * .7 + r.bits * .3 : r.bits;
   save.bestScore = Math.max(save.bestScore || 0, score);
+  save.cycleBest = Math.max(save.cycleBest || 0, Math.floor(r.dist)); save.cycleAlt = Math.max(save.cycleAlt || 0, Math.floor(r.maxAlt));
+  save.maxCombo = Math.max(save.maxCombo || 0, r.maxCombo);
   if (recD) save.bestDist = Math.floor(r.dist);
   if (recA) save.bestAlt = Math.floor(r.maxAlt);
-  checkGoals();
+  save.boxes += r.boxes;
+  const xpFlight = 10 + Math.round(Math.sqrt(r.dist) * 1.5) + Math.round(r.maxAlt / 20);
+  r.xp = (r.xp || 0); addXP(xpFlight); const xpGain = r.xp + xpFlight;
+  checkGoals(); fillMissions();
   persist();
   $('rTitle').textContent = r.moon ? 'LUNA ALCANZADA' : recD ? 'NUEVO RÉCORD' : 'ATERRIZAJE';
   $('rGrade').textContent = grade; $('rGradeTxt').textContent = gtxt;
   const tg = $('rTags'); tg.innerHTML = '';
   const tag = (t, c = '') => tg.insertAdjacentHTML('beforeend', `<span class="tag ${c}">${t}</span>`);
+  if (save.level > lv0) tag(`¡Nivel ${save.level}!`, 'gold');
   if (r.tier && r.tier !== 'OK') tag('Lanzamiento ' + r.tier, r.tier === 'PERFECTO' ? 'gold' : '');
   if (recD) tag('Récord de distancia', 'gold');
+  else if (prevBest > 0 && prevBest - r.dist <= prevBest * .3) tag(`A ${fmt(prevBest - r.dist)} m de tu récord`, '');
   if (recA) tag('Récord de altura', 'gold');
+  if (r.boxes) tag(r.boxes > 1 ? `${r.boxes} cajas de datos` : 'Caja de datos', 'gold');
   if (r.bounces) tag(r.bounces + ' rebotes', 'mint');
   r.goals.forEach(g => tag('Logro: ' + g, 'mint'));
   $('rMult').textContent = '×' + ST.mult.toFixed(2).replace(/\.00$/, '');
+  // nivel y misiones
+  $('rLvl').textContent = save.level; $('rXpGain').textContent = `+${fmt(xpGain)} XP`;
+  $('rXp').style.width = (save.xp / xpNeed(save.level) * 100).toFixed(1) + '%';
+  $('rMis').innerHTML = r.missions.map(t => `<div class="mis done"><div class="mis-ic">${icon('i-check')}</div><div class="mis-b"><div class="mis-t">${t}</div></div></div>`).join('')
+    + save.missions.map(m => missionRow(m)).join('');
+  refreshMenuInfo();
   const rows = [['rDist', r.dist, ' M'], ['rAlt', r.maxAlt, ' M'], ['rBits', r.bits, ''], ['rBonus', bonus, ''], ['rCry', r.cry, ''], ['rTotal', total, '']];
   rows.forEach(([id, , suf]) => $(id).textContent = '0' + suf);
   setTimeout(() => {
     if (state !== 'RESULTS') return;
-    $('hud').classList.add('hidden'); showScreen('scrResults');
+    $('hud').classList.add('hidden'); showScreen('scrResults'); $('scrResults').querySelector('.res').scrollTop = 0;
     const g = $('rGrade'); g.style.animation = 'none'; void g.offsetWidth; g.style.animation = '';
     let k = 0; const t0 = performance.now();
     (function anim(now){
       const p = clamp((now - t0) / 1000, 0, 1), e = 1 - Math.pow(1 - p, 3);
       rows.forEach(([id, v, suf]) => $(id).textContent = fmt(v * e) + suf);
       if (p < 1){ if ((k++ & 3) === 0) SFX.tick(); requestAnimationFrame(anim); }
-      else if (recD || r.moon){ confetti(160); SFX.fanfare(); }
+      else {
+        if (recD || r.moon){ confetti(160); SFX.fanfare(); }
+        if (save.boxes > 0) setTimeout(() => { if (state === 'RESULTS' && !shopOpen()) openBoxes(); }, 700);
+      }
     })(t0);
   }, 650);
 }
 function checkGoals(){
-  if (!RUN) return;
-  const r = { dist:Math.max(0, P.x / PXM), maxAlt:RUN.maxAlt, bounces:RUN.bounces, perfect:RUN.perfect, bits:RUN.bits };
+  const run = RUN && !RUN.counted;
+  const r = { dist:run ? Math.max(0, P.x / PXM) : 0, maxAlt:run ? RUN.maxAlt : 0, bounces:run ? RUN.bounces : 0, perfect:run && RUN.perfect, bits:run ? RUN.bits : 0,
+    combo:Math.max(save.maxCombo || 0, run ? RUN.maxCombo : 0), level:save.level, missions:save.missionsDone, flights:save.flights,
+    boxes:save.boxesOpened, version:save.version };
   for (const g of GOALS){
     if (save.goals[g.id] || !g.test(r)) continue;
-    save.goals[g.id] = true; save.bits += g.bits; save.crystals += g.cry || 0; RUN.goals.push(g.txt.split(':')[0]);
+    save.goals[g.id] = true; give(g.bits, g.cry || 0); if (run) RUN.goals.push(g.txt.split(':')[0]);
     achievement(g);
   }
+  if (run && state === 'FLIGHT') missionTick();
 }
 function setPause(p){
   if (state !== 'AIM' && state !== 'FLIGHT') return;
@@ -1270,11 +1529,186 @@ function setPause(p){
   showScreen(p ? 'scrPause' : null);
 }
 
+// =========================================================
+//   PROGRESIÓN: misiones, nivel, cajas, diario y reentrenar
+// =========================================================
+const rr = (a, b) => a + Math.random() * (b - a);
+const ri = (a, b) => Math.floor(rr(a, b + 1));
+const roundTo = (v, s) => Math.max(s, Math.round(v / s) * s);
+const tierOf = () => clamp(Math.floor((save.level - 1) / 3), 0, 6);
+const earnBase = () => Math.max(40, save.avgEarn || 40);
+function give(bits, cry = 0){ bits = Math.round(bits); save.bits += bits; save.cycleBits += bits; save.lifeBits += bits; save.crystals += cry; }
+
+// misiones: "per" se cumplen dentro de un solo vuelo; las demás acumulan entre vuelos
+const MISSIONS = {
+  dist:    { per:true, ic:'i-flag',   txt:n => `Vuela ${fmt(n)} m en un vuelo`,              gen:() => roundTo(Math.max(80, save.cycleBest * rr(.55, 1)), 25),  val:r => r.dist },
+  alt:     { per:true, ic:'i-alt',    txt:n => `Sube a ${fmt(n)} m de altura`,              gen:() => roundTo(Math.max(30, (save.cycleAlt || 0) * rr(.5, .95)), 10), val:r => r.maxAlt },
+  bits:    { per:true, ic:'i-bit',    txt:n => `Recolecta ${fmt(n)} bits en un vuelo`,      gen:() => roundTo(Math.max(25, (save.avgBits || 25) * rr(.8, 1.3)), 5), val:r => r.bits },
+  bounce:  { per:true, ic:'i-bounce', txt:n => `Rebota ${n} veces en un vuelo`,             gen:() => ri(4, 6 + tierOf() * 2), val:r => r.bounces },
+  rings:   { per:true, ic:'i-speed',  txt:n => `Atraviesa ${n} ${n > 1 ? 'gradientes' : 'gradiente'} ∇ en un vuelo`, gen:() => ri(1, 1 + Math.min(3, tierOf())), val:r => r.rings, ok:() => (save.cycleAlt || 0) >= 60 },
+  combo:   { per:true, ic:'i-bit',    txt:n => `Haz un combo de ×${n} bits`,                gen:() => ri(8, 12 + tierOf() * 5), val:r => r.maxCombo },
+  nohit:   { per:true, ic:'i-shield', txt:n => `Vuela ${fmt(n)} m sin chocar`,              gen:() => roundTo(Math.max(100, save.cycleBest * rr(.35, .7)), 25), val:r => r.hitDist < 0 ? r.dist : r.hitDist, ok:() => save.cycleBest >= 250 },
+  noflap:  { per:true, ic:'i-wing',   txt:n => `Vuela ${fmt(n)} m sin aletear`,             gen:() => roundTo(Math.max(80, save.cycleBest * rr(.3, .6)), 25),  val:r => r.flapDist < 0 ? r.dist : r.flapDist },
+  pops:    { ic:'i-star',   txt:n => `Revienta ${n} burbujas`,                               gen:() => ri(3, 6 + tierOf() * 2), val:r => r.pops },
+  perfects:{ ic:'i-star',   txt:n => `Haz ${n} ${n > 1 ? 'lanzamientos PERFECTOS' : 'lanzamiento PERFECTO'}`, gen:() => ri(1, 3), val:r => r.perfect ? 1 : 0 },
+  datasets:{ ic:'i-db',     txt:n => `Consigue ${n} datasets`,                               gen:() => ri(2, 4 + tierOf()), val:r => r.cry },
+  deploys: { ic:'i-rocket', txt:n => `Rebota en ${n} ${n > 1 ? 'plataformas' : 'plataforma'} DEPLOY`, gen:() => ri(1, 2 + (tierOf() >> 1)), val:r => r.deploys, ok:() => save.cycleBest >= 300 },
+  totdist: { ic:'i-pin',    txt:n => `Vuela ${fmt(n)} m en total`,                           gen:() => roundTo(Math.max(400, save.cycleBest * rr(2.5, 4)), 50), val:r => r.dist },
+};
+const inRun = () => !!(RUN && !RUN.counted);
+function newMission(){
+  const have = new Set(save.missions.map(m => m.t));
+  const pool = Object.keys(MISSIONS).filter(k => !have.has(k) && (!MISSIONS[k].ok || MISSIONS[k].ok()));
+  const t = pool[Math.floor(Math.random() * pool.length)], M = MISSIONS[t];
+  return { t, n:M.gen(), p:0, born:save.flights + (inRun() ? 1 : 0), k:+(rr(.5, .8) * (M.per ? 1 : 1.3)).toFixed(2), cry:Math.random() < .35 ? ri(1, 3) : 0, xp:25 + 8 * tierOf() };
+}
+function fillMissions(){ save.missions = save.missions.filter(m => MISSIONS[m.t]); while (save.missions.length < 3) save.missions.push(newMission()); }
+const missionBits = m => roundTo(earnBase() * m.k, 5);
+function missionProg(m){
+  const M = MISSIONS[m.t], live = inRun() && m.born <= save.flights;
+  return (M.per ? 0 : m.p) + (live ? M.val(RUN) : 0);
+}
+function missionTick(){
+  for (let i = 0; i < save.missions.length; i++){
+    const m = save.missions[i];
+    if (m.born > save.flights || missionProg(m) < m.n) continue;
+    const bits = missionBits(m);
+    give(bits, m.cry); save.missionsDone++;
+    RUN.missions.push(MISSIONS[m.t].txt(m.n));
+    note(MISSIONS[m.t].txt(m.n), 'good', 'i-target', `MISIÓN COMPLETADA · +${fmt(bits)} BITS${m.cry ? ' · +' + m.cry + ' DATASETS' : ''}`);
+    SFX.buy(); addXP(m.xp);
+    save.missions[i] = newMission();
+  }
+}
+
+// nivel de investigador
+function addXP(x){
+  x = Math.round(x); save.xp += x; if (inRun()) RUN.xp = (RUN.xp || 0) + x;
+  while (save.xp >= xpNeed(save.level)){
+    save.xp -= xpNeed(save.level); save.level++;
+    const big = save.level % 5 === 0;
+    save.boxes += big ? 2 : 1; if (big) save.crystals += 10;
+    if (inRun()) RUN.levels = (RUN.levels || 0) + 1;
+    note(`Nivel ${save.level} · ${rankOf(save.level)}`, 'zone', 'i-level', big ? 'SUBISTE DE NIVEL · 2 CAJAS + 10 DATASETS' : 'SUBISTE DE NIVEL · +1 CAJA');
+    SFX.tier(3);
+  }
+}
+
+// cajas de datos: recompensa variable
+function rollBox(){
+  const b = earnBase(), r = Math.random();
+  const excl = SKINS.filter(s => s.cost === -2 && !save.skins.includes(s.id));
+  if (excl.length && r < .035){
+    const s = excl[Math.floor(Math.random() * excl.length)]; save.skins.push(s.id);
+    return { rar:'LEGENDARIA', cls:'leg', ic:'i-palette', txt:'Estilo ' + s.name, sub:'EXCLUSIVO DE CAJAS' };
+  }
+  if (r < .09){ const bits = roundTo(b * rr(4, 6), 5), cry = ri(12, 20); give(bits, cry); return { rar:'ÉPICA', cls:'epic', ic:'i-star', txt:`+${fmt(bits)} bits`, sub:`+${cry} datasets` }; }
+  if (r < .36){ const cry = ri(3, 8); give(0, cry); return { rar:'RARA', cls:'rare', ic:'i-db', txt:`+${cry} datasets` }; }
+  const bits = roundTo(b * rr(.8, 2.2), 5); give(bits); return { rar:'COMÚN', cls:'com', ic:'i-bit', txt:`+${fmt(bits)} bits` };
+}
+let boxDone = null, boxOpen = false;
+function openBoxes(done){
+  if (save.boxes <= 0){ if (done) done(); return; }
+  boxDone = done || null; boxOpen = false;
+  $('boxBig').className = 'box-big'; $('boxRes').className = 'box-res hidden';
+  $('boxTitle').textContent = 'CAJA DE DATOS'; $('boxKick').textContent = save.boxes > 1 ? `TIENES ${save.boxes} CAJAS` : 'RECOMPENSA';
+  $('btnBox').innerHTML = `${icon('i-box')}ABRIR`;
+  $('scrBox').classList.remove('hidden'); SFX.ui();
+}
+function boxAction(){
+  if (!boxOpen){
+    if (save.boxes <= 0) return;
+    boxOpen = true; save.boxes--; save.boxesOpened++;
+    const res = rollBox(); checkGoals(); persist(); ST = stats();
+    const bb = $('boxBig'); bb.className = 'box-big shake';
+    $('btnBox').disabled = true;
+    setTimeout(() => {
+      bb.className = 'box-big gone';
+      const el = $('boxRes'); el.className = 'box-res ' + res.cls;
+      el.innerHTML = `<div class="br-rar">${res.rar}</div><div class="br-ic">${icon(res.ic)}</div><div class="br-txt">${res.txt}</div>${res.sub ? `<div class="br-sub">${res.sub}</div>` : ''}`;
+      $('boxTitle').textContent = res.cls === 'leg' ? '¡LEGENDARIA!' : res.cls === 'epic' ? '¡ÉPICA!' : 'CAJA ABIERTA';
+      if (res.cls === 'leg' || res.cls === 'epic'){ SFX.fanfare(); confetti(res.cls === 'leg' ? 220 : 120); } else SFX.buy();
+      $('btnBox').disabled = false;
+      $('btnBox').innerHTML = save.boxes > 0 ? `${icon('i-box')}ABRIR OTRA (${save.boxes})` : `${icon('i-check')}CONTINUAR`;
+      refreshMenuInfo();
+    }, 650);
+    SFX.tick();
+  } else if (save.boxes > 0) openBoxes(boxDone);
+  else { $('scrBox').classList.add('hidden'); SFX.ui(); const d = boxDone; boxDone = null; if (d) d(); }
+}
+
+// recompensa diaria con racha de 7 días
+const dayKey = d => d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+const DAILY = [
+  { ic:'i-bit', bits:1 }, { ic:'i-db', cry:5 }, { ic:'i-box', box:1 }, { ic:'i-bit', bits:2.5 },
+  { ic:'i-db', cry:10 }, { ic:'i-box', box:2 }, { ic:'i-gift', box:3, cry:20 },
+];
+const dailyBits = d => roundTo(Math.max(60, earnBase()) * d.bits, 5);
+const dailyLabel = d => [d.bits ? fmt(dailyBits(d)) + ' bits' : '', d.cry ? d.cry + ' datasets' : '', d.box ? d.box + (d.box > 1 ? ' cajas' : ' caja') : ''].filter(Boolean).join(' + ');
+let dailyPending = 0;
+function checkDaily(){
+  if (save.flights < 1) return false;
+  const t = dayKey(new Date()); if (save.daily.last === t) return false;
+  const y = dayKey(new Date(Date.now() - 864e5));
+  dailyPending = save.daily.last === y ? save.daily.streak % 7 + 1 : 1;
+  $('dailyGrid').innerHTML = DAILY.map((d, i) => `<div class="dtile ${i + 1 < dailyPending ? 'got' : i + 1 === dailyPending ? 'now' : ''}">
+    <div class="dt-d">DÍA ${i + 1}</div><div class="dt-ic">${icon(i + 1 < dailyPending ? 'i-check' : d.ic)}</div><div class="dt-v">${dailyLabel(d)}</div></div>`).join('');
+  $('dailyStreak').textContent = dailyPending > 1 ? `RACHA DE ${dailyPending} DÍAS · NO LA PIERDAS` : 'VUELVE MAÑANA PARA SUBIR TU RACHA';
+  $('scrDaily').classList.remove('hidden'); SFX.tier(2);
+  return true;
+}
+function claimDaily(){
+  const d = DAILY[dailyPending - 1];
+  save.daily = { last:dayKey(new Date()), streak:dailyPending };
+  give(d.bits ? dailyBits(d) : 0, d.cry || 0); save.boxes += d.box || 0;
+  persist(); $('scrDaily').classList.add('hidden'); SFX.buy();
+  note(dailyLabel(d), 'good', 'i-gift', 'RECOMPENSA DIARIA');
+  refreshMenuInfo();
+  if (d.box) setTimeout(() => openBoxes(), 500);
+}
+
+// reentrenar (prestigio)
+const canPrestige = () => save.cycleBest >= PRESTIGE_DIST && prestigeGain() >= 1;
+function doPrestige(){
+  const g = prestigeGain(); if (!canPrestige()) return;
+  save.params += g; save.version++;
+  save.bits = 0; save.cycleBits = 0; save.cycleBest = 0; save.cycleAlt = 0;
+  save.avgEarn = Math.round((save.avgEarn || 0) * .15); save.avgBits = Math.round((save.avgBits || 0) * .3);
+  for (const u of UPG) save.upg[u.id] = 0;
+  const st = 2 * perk('pStart'); save.upg.catapulta = st; save.upg.alas = Math.min(st, 12);
+  if (save.version >= 3 && !save.skins.includes('arquitecto')) save.skins.push('arquitecto');
+  save.missions = []; fillMissions();
+  ST = stats(); checkGoals(); persist();
+  confetti(220); SFX.fanfare(); flash = .8; flashCol = '#ffffff';
+  bigCallout(`MODELO v${save.version}`, `REENTRENADO · +${g} PARÁMETROS`, true);
+}
+
+// ¿hay algo que comprar? (punto rojo en el Taller)
+const shopHasNews = () => UPG.some(u => save.upg[u.id] < u.max && upgCost(u, save.upg[u.id]) <= save.bits)
+  || LAB.some(p => perk(p.id) < p.max && p.cost(perk(p.id)) <= save.params) || canPrestige();
+function refreshMenuInfo(){
+  $('mBest').textContent = fmt(save.bestDist); $('mAlt').textContent = fmt(save.bestAlt);
+  $('mBits').textContent = fmt(save.bits); $('mCry').textContent = fmt(save.crystals);
+  $('mLvl').textContent = save.level; $('mRank').textContent = rankOf(save.level);
+  $('mVer').textContent = 'MODELO v' + save.version;
+  $('mXp').style.width = (save.xp / xpNeed(save.level) * 100).toFixed(1) + '%';
+  $('mXpTxt').textContent = `${fmt(save.xp)} / ${fmt(xpNeed(save.level))} XP`;
+  const news = shopHasNews();
+  document.querySelectorAll('[data-act="upg"],#btnResShop').forEach(b => b.classList.toggle('has-dot', news));
+  $('mBoxBtn').classList.toggle('hidden', save.boxes <= 0);
+  $('mBoxN').textContent = save.boxes;
+}
+function missionRow(m, cls = ''){
+  const M = MISSIONS[m.t], pr = Math.min(m.n, Math.floor(missionProg(m)));
+  return `<div class="mis ${cls}"><div class="mis-ic">${icon(M.ic)}</div><div class="mis-b"><div class="mis-t">${M.txt(m.n)}</div>
+    ${M.per ? '' : `<div class="mis-bar"><i style="width:${(pr / m.n * 100).toFixed(1)}%"></i></div>`}</div>
+    <div class="mis-r">${M.per ? '' : `<small>${fmt(pr)}/${fmt(m.n)}</small>`}<span>${icon('i-bit', 'c-bit')}${fmt(missionBits(m))}</span></div></div>`;
+}
 // ---------- colisiones ----------
 function collect(o){
   o.dead = true;
   if (o.t === 'coin'){
-    RUN.bits += o.v; RUN.combo++; RUN.comboT = 1.2; SFX.coin(RUN.combo);
+    RUN.bits += o.v; RUN.combo++; RUN.comboT = 1.2; RUN.maxCombo = Math.max(RUN.maxCombo, RUN.combo); SFX.coin(RUN.combo);
     const col = o.v === 1 ? '#ffc94d' : o.v === 2 ? '#6ee7ff' : '#f062b0';
     emit(o.x, o.y, 6, { col:[col, '#fff'], sp:130, life:.4, size:3 });
     floatText(o.x, o.y + 10, '+' + o.v, col, 22);
@@ -1285,6 +1719,12 @@ function collect(o){
     P.flaps = Math.min(P.flaps + 1, ST.flaps + 3); SFX.neuron(); hudCache.flaps = null;
     emit(o.x, o.y, 16, { col:['#f062b0', '#ffc94d', '#fff'], sp:190, life:.6, size:4 });
     floatText(o.x, o.y + 14, '+1 ALETEO', '#f062b0', 26);
+  } else if (o.t === 'box'){
+    RUN.boxes++; SFX.dataset(); SFX.tier(2); shake = Math.max(shake, 6); flash = .25; flashCol = '#ffe7ad';
+    shockwave(o.x, o.y, '#ffc94d', 130);
+    emit(o.x, o.y, 28, { col:['#ffc94d', '#ffe7ad', '#fff', '#f062b0'], sp:260, life:.8, size:5, type:'spark' });
+    floatText(o.x, o.y + 18, '¡CAJA DE DATOS!', '#ffc94d', 30);
+    note('Caja de datos', 'zone', 'i-box', 'SE ABRE AL ATERRIZAR');
   }
 }
 const ENEMY_TXT = { outlier:'¡Outlier detectado!', nan:'Valor nulo: NaN', noise:'Ruido en los datos', bug:'¡Bug en el código!', e404:'Error 404', overfit:'¡Overfitting!' };
@@ -1297,6 +1737,7 @@ function obstacleHit(o){
     note('Validación cruzada: bloqueado', 'good', 'i-shield'); return;
   }
   P.invuln = .7; P.hurt = .9; shake = 16; SFX.hit(); RUN.combo = 0; P.hyper = 0;
+  if (RUN.hitDist < 0) RUN.hitDist = Math.max(0, P.x / PXM);
   note(ENEMY_TXT[o.t], 'warn', 'i-warn');
   switch (o.t){
     case 'outlier': P.vx *= .62; P.vy = Math.min(P.vy, -420); emit(P.x, P.y, 12, { col:['#ff5470', '#ffb3c2'], sp:180, life:.7, size:4 }); break;
@@ -1317,7 +1758,7 @@ function collide(o){
   if (o.dead) return;
   const dx = P.x - o.x, dy = P.y - o.y, d2 = dx * dx + dy * dy;
   switch (o.t){
-    case 'coin': case 'dataset': case 'neuron':
+    case 'coin': case 'dataset': case 'neuron': case 'box':
       if (o.t !== 'neuron' && ST.magnet > 0 && d2 < (ST.magnet + P.r) ** 2) o.mag = true;
       if (d2 < (P.r + o.r + 4) ** 2) collect(o);
       break;
@@ -1327,11 +1768,11 @@ function collide(o){
       } break;
     case 'deploy':
       if (P.vy < 0 && Math.abs(dx) < 42 && P.y - P.r < 112 && P.y > 30 && time - (o.hit || -9) > .25){
-        o.hit = time; o.sq = 1; P.y = 112 + P.r; P.vy = Math.max(1550, -P.vy); P.vx += 260; bounceFx('¡DEPLOY!'); shake = 12;
+        o.hit = time; o.sq = 1; P.y = 112 + P.r; P.vy = Math.max(1550, -P.vy); P.vx += 260; bounceFx('¡DEPLOY!'); shake = 12; RUN.deploys++;
       } break;
     case 'bubble':
       if (d2 < (P.r + o.r) ** 2){
-        o.dead = true; P.vy = Math.max(P.vy, 0) + 760; P.vx += 70; RUN.bounces++; SFX.pop(); SFX.bounce(); P.sq = .7;
+        o.dead = true; P.vy = Math.max(P.vy, 0) + 760; P.vx += 70; RUN.bounces++; RUN.pops++; SFX.pop(); SFX.bounce(); P.sq = .7;
         emit(o.x, o.y, 18, { col:[o.col, '#fff'], sp:240, life:.5, size:4 }); floatText(o.x, o.y + 24, 'POP', o.col, 28);
       } break;
     case 'cloud':
@@ -1340,7 +1781,7 @@ function collide(o){
       } break;
     case 'ring':
       if (!o.used && d2 < 56 * 56){
-        o.used = true; const sp = Math.hypot(P.vx, P.vy) || 1;
+        o.used = true; RUN.rings++; const sp = Math.hypot(P.vx, P.vy) || 1;
         P.vx += P.vx / sp * 560; P.vy += P.vy / sp * 560 + 180; SFX.whoosh(); flash = .3; flashCol = '#fff3b0'; shake = 8;
         shockwave(o.x, o.y, '#ffc94d', 150);
         emit(o.x, o.y, 24, { col:['#ffc94d', '#fff', '#f062b0'], sp:280, life:.6, size:4, type:'spark' });
@@ -1917,6 +2358,24 @@ function drawObj(c, o){
       c.fillStyle = '#fff'; c.globalAlpha = sp; drawSparkle(c, 15, -18, 6); c.globalAlpha = 1;
       c.restore(); break;
     }
+    case 'box': {
+      const b = Math.sin(time * 2.2 + o.ph) * 6, rot = Math.sin(time * 1.6 + o.ph) * .18;
+      c.save(); c.translate(x, y + b);
+      const gl = c.createRadialGradient(0, 0, 4, 0, 0, 52); gl.addColorStop(0, 'rgba(255,201,77,.6)'); gl.addColorStop(1, 'rgba(255,201,77,0)');
+      c.fillStyle = gl; c.beginPath(); c.arc(0, 0, 52, 0, TAU); c.fill();
+      c.save(); c.rotate(time * .8 + o.ph); c.strokeStyle = 'rgba(255,231,173,.55)'; c.lineWidth = 2;
+      for (let k = 0; k < 8; k++){ const a = k / 8 * TAU; c.beginPath(); c.moveTo(Math.cos(a) * 26, Math.sin(a) * 26); c.lineTo(Math.cos(a) * 38, Math.sin(a) * 38); c.stroke(); }
+      c.restore();
+      c.rotate(rot);
+      // caja isométrica dorada
+      c.lineJoin = 'round'; c.lineWidth = 2; c.strokeStyle = '#7a4a00';
+      c.fillStyle = '#ffb347'; c.beginPath(); c.moveTo(-16, -6); c.lineTo(0, 2); c.lineTo(0, 20); c.lineTo(-16, 12); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = '#e0891a'; c.beginPath(); c.moveTo(16, -6); c.lineTo(0, 2); c.lineTo(0, 20); c.lineTo(16, 12); c.closePath(); c.fill(); c.stroke();
+      c.fillStyle = '#ffe7ad'; c.beginPath(); c.moveTo(0, -14); c.lineTo(16, -6); c.lineTo(0, 2); c.lineTo(-16, -6); c.closePath(); c.fill(); c.stroke();
+      c.strokeStyle = '#f062b0'; c.lineWidth = 3; c.beginPath(); c.moveTo(-8, -10); c.lineTo(8, -2); c.lineTo(8, 16); c.stroke();
+      c.fillStyle = '#fff'; c.globalAlpha = (Math.sin(time * 6 + o.ph) + 1) / 2; drawSparkle(c, 18, -18, 7); c.globalAlpha = 1;
+      c.restore(); break;
+    }
     case 'neuron': {
       const s = 1 + Math.sin(time * 4 + o.ph) * .08;
       c.save(); c.translate(x, y); c.scale(s, s);
@@ -2312,15 +2771,19 @@ setTimeout(skipIntro, 3600);
 // ---------- menús ----------
 function enterMenu(){ if (state !== 'SPLASH') return; A.init(); SFX.ui(); goMenu(); }
 $('scrSplash').addEventListener('pointerdown', enterMenu);
-document.querySelectorAll('.mbtn').forEach(b => {
+document.querySelectorAll('#scrMenu [data-act]').forEach(b => {
   b.addEventListener('mouseenter', () => SFX.hover());
   b.addEventListener('click', () => {
     const act = b.dataset.act;
     if (act === 'play') startAim();
     else if (act === 'settings') openSettings();
+    else if (act === 'boxes') openBoxes(refreshMenuInfo);
     else openShop(act, 'MENU');
   });
 });
+$('btnBox').onclick = boxAction;
+$('boxBig').onclick = () => { if (!boxOpen) boxAction(); };
+$('btnDaily').onclick = claimDaily;
 document.querySelectorAll('.btn').forEach(b => b.addEventListener('mouseenter', () => SFX.hover()));
 $('btnResAgain').onclick = startAim;
 $('btnShopPlay').onclick = startAim;
@@ -2340,26 +2803,58 @@ $('tabs').addEventListener('click', e => {
 function setTab(t){
   shopTab = t;
   [...$('tabs').children].forEach(x => x.classList.toggle('on', x.dataset.tab === t));
-  $('shopTitle').textContent = { upg:'TALLER', skin:'ESTILOS', goal:'LOGROS' }[t];
+  $('shopTitle').textContent = { upg:'TALLER', lab:'LABORATORIO', mis:'MISIONES', skin:'ESTILOS', goal:'LOGROS' }[t];
+  const on = $('tabs').querySelector('.on'); if (on) on.scrollIntoView({ block:'nearest', inline:'nearest' });
   renderShop();
 }
 function openShop(tab, from){
   A.init(); SFX.ui(); shopFrom = from;
   showScreen('scrShop'); setTab(tab);
 }
+const lvlBar = (L, max) => `<div class="lvl">${Array.from({ length:max }, (_, i) => `<span class="${i < L ? 'on' : ''}"></span>`).join('')}</div>`;
+const LOCK_TXT = { '-1':'TOCA LA LUNA', '-2':'SOLO EN CAJAS', '-3':'MODELO v3' };
+let prestigeArm = 0;
 function renderShop(){
-  $('sBits').textContent = fmt(save.bits); $('sCry').textContent = fmt(save.crystals);
-  const body = $('shopBody'); body.innerHTML = '';
+  $('sBits').textContent = fmt(save.bits); $('sCry').textContent = fmt(save.crystals); $('sPar').textContent = fmt(save.params);
+  $('sParW').classList.toggle('hidden', save.params <= 0 && save.version <= 1 && shopTab !== 'lab');
+  const body = $('shopBody'); body.innerHTML = ''; body.scrollTop = 0;
   if (shopTab === 'upg'){
     for (const u of UPG){
       const L = save.upg[u.id], maxed = L >= u.max, cost = upgCost(u, L), can = !maxed && save.bits >= cost;
       const d = document.createElement('div'); d.className = 'card';
-      d.innerHTML = `<div class="ico">${icon(u.icon)}</div><div><h4>${u.name}</h4><div class="ds">${u.desc}</div>
-        <div class="lvl">${Array.from({ length:u.max }, (_, i) => `<span class="${i < L ? 'on' : ''}"></span>`).join('')}</div></div>
+      d.innerHTML = `<div class="ico">${icon(u.icon)}</div><div><h4>${u.name}</h4><div class="ds">${u.desc}</div>${lvlBar(L, u.max)}</div>
         <div class="st"><span>NIVEL ${L}/${u.max}</span><span><b>${u.val(L)}</b>${maxed ? '' : ' → ' + u.val(L + 1)}</span></div>
         <button class="buy ${maxed ? 'max' : can ? 'ok' : 'no'}" data-buy="${u.id}">${maxed ? '<span>NIVEL MÁXIMO</span>' + icon('i-check') : `<span>MEJORAR</span><span class="price">${icon('i-bit', 'c-bit')}${fmt(cost)}</span>`}</button>`;
       body.appendChild(d);
     }
+  } else if (shopTab === 'lab'){
+    const gain = prestigeGain(), ok = canPrestige(), prog = Math.min(save.cycleBest, PRESTIGE_DIST);
+    const btnTxt = ok ? (prestigeArm ? '¿SEGURO? PULSA DE NUEVO' : 'REENTRENAR MODELO') : save.cycleBest < PRESTIGE_DIST ? 'AÚN NO DISPONIBLE' : 'GANA MÁS BITS PRIMERO';
+    const d = document.createElement('div'); d.className = 'card prest';
+    d.innerHTML = `<div class="ico">${icon('i-flask')}</div><div><h4>Reentrenar modelo · v${save.version} → v${save.version + 1}</h4>
+      <div class="ds">Reinicia el taller y los bits a cambio de <b>Parámetros</b> para mejoras permanentes. Conservas nivel, estilos, datasets, logros y récords.</div></div>
+      <div class="st"><span>REQUISITO: VUELA ${fmt(PRESTIGE_DIST)} M EN UN VUELO</span><span><b>${fmt(prog)}</b> / ${fmt(PRESTIGE_DIST)} m</span></div>
+      <div class="mis-bar" style="grid-column:1/-1"><i style="width:${(prog / PRESTIGE_DIST * 100).toFixed(1)}%"></i></div>
+      <div class="st"><span>GANARÍAS</span><span><b class="c-par">+${gain} ${gain === 1 ? 'PARÁMETRO' : 'PARÁMETROS'}</b> (más bits en esta versión = más parámetros)</span></div>
+      <button class="buy ${ok ? 'ok' : 'no'}" data-prestige="1"><span>${btnTxt}</span>${icon(ok ? 'i-cycle' : 'i-lock')}</button>`;
+    body.appendChild(d);
+    for (const p of LAB){
+      const L = perk(p.id), maxed = L >= p.max, cost = p.cost(L), can = !maxed && save.params >= cost;
+      const c = document.createElement('div'); c.className = 'card lab';
+      c.innerHTML = `<div class="ico">${icon(p.icon)}</div><div><h4>${p.name}</h4><div class="ds">${p.desc}</div>${lvlBar(L, p.max)}</div>
+        <div class="st"><span>NIVEL ${L}/${p.max}</span><span><b>${p.val(L)}</b>${maxed ? '' : ' → ' + p.val(L + 1)}</span></div>
+        <button class="buy ${maxed ? 'max' : can ? 'ok' : 'no'}" data-lab="${p.id}">${maxed ? '<span>NIVEL MÁXIMO</span>' + icon('i-check') : `<span>INVESTIGAR</span><span class="price">${icon('i-flask', 'c-par')}${cost}</span>`}</button>`;
+      body.appendChild(c);
+    }
+  } else if (shopTab === 'mis'){
+    fillMissions();
+    const h = document.createElement('div'); h.className = 'card mis-card';
+    h.innerHTML = `<div class="mis-head">${icon('i-level')}<div><b>NIVEL ${save.level} · ${rankOf(save.level)}</b>
+      <div class="xpbar"><i style="width:${(save.xp / xpNeed(save.level) * 100).toFixed(1)}%"></i></div>
+      <small>${fmt(save.xp)} / ${fmt(xpNeed(save.level))} XP · cada nivel da una caja de datos (cada 5 niveles: 2 cajas + 10 datasets)</small></div></div>
+      ${save.missions.map(m => missionRow(m)).join('')}
+      <div class="mis-foot">Completa misiones para ganar bits, datasets y XP. Al completar una aparece otra nueva. Llevas <b>${fmt(save.missionsDone)}</b> completadas.</div>`;
+    body.appendChild(h);
   } else if (shopTab === 'skin'){
     for (const s of SKINS){
       const own = save.skins.includes(s.id), eq = save.skin === s.id;
@@ -2368,7 +2863,7 @@ function renderShop(){
       let btn;
       if (eq) btn = `<button class="buy max" data-skin="${s.id}"><span>EQUIPADO</span>${icon('i-check')}</button>`;
       else if (own) btn = `<button class="buy" data-skin="${s.id}"><span>EQUIPAR</span></button>`;
-      else if (s.cost < 0) btn = `<button class="buy no" data-skin="${s.id}"><span>BLOQUEADO</span>${icon('i-lock')}</button>`;
+      else if (s.cost < 0) btn = `<button class="buy no" data-skin="${s.id}"><span>${LOCK_TXT[s.cost]}</span>${icon('i-lock')}</button>`;
       else btn = `<button class="buy ${can ? 'ok' : 'no'}" data-skin="${s.id}"><span>DESBLOQUEAR</span><span class="price">${icon('i-db', 'c-db')}${s.cost}</span></button>`;
       d.innerHTML = `<canvas width="192" height="144"></canvas><div><h4>${s.name}</h4><div class="ds">${s.desc}</div></div>${btn}`;
       body.appendChild(d);
@@ -2376,33 +2871,47 @@ function renderShop(){
       drawButterfly(cc, 48, 38, .62, 0, 1, s, 1.2);
     }
   } else {
+    const done = GOALS.filter(g => save.goals[g.id]).length;
+    const hd = document.createElement('div'); hd.className = 'goal-sum'; hd.innerHTML = `${icon('i-trophy')}<b>${done} / ${GOALS.length}</b> LOGROS DESBLOQUEADOS`;
+    body.appendChild(hd);
     for (const g of GOALS){
       const ok = !!save.goals[g.id];
       const d = document.createElement('div'); d.className = 'card goal' + (ok ? ' ok' : '');
       d.innerHTML = `<div class="ico">${icon(ok ? 'i-check' : g.ic)}</div><div><h4 style="font-size:20px">${g.txt}</h4>
         <div class="ds" style="display:flex;gap:10px;align-items:center;margin-top:6px">${ok ? '<b style="color:var(--mint)">COMPLETADO</b>' : 'RECOMPENSA'}
-        <span style="display:flex;gap:4px;align-items:center">${icon('i-bit', 'c-bit')}${fmt(g.bits)}</span>${g.cry ? `<span style="display:flex;gap:4px;align-items:center">${icon('i-db', 'c-db')}${g.cry}</span>` : ''}</div></div>`;
+        ${g.bits ? `<span style="display:flex;gap:4px;align-items:center">${icon('i-bit', 'c-bit')}${fmt(g.bits)}</span>` : ''}${g.cry ? `<span style="display:flex;gap:4px;align-items:center">${icon('i-db', 'c-db')}${g.cry}</span>` : ''}</div></div>`;
       body.appendChild(d);
     }
   }
 }
 $('shopBody').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
+  const shakeBtn = () => b.animate([{ transform:'translateX(-5px)' }, { transform:'translateX(5px)' }, { transform:'none' }], { duration:200 });
   if (b.dataset.buy){
     const u = UPG.find(x => x.id === b.dataset.buy), L = save.upg[u.id];
     if (L >= u.max) return;
     const cost = upgCost(u, L);
-    if (save.bits < cost){ SFX.deny(); b.animate([{ transform:'translateX(-5px)' }, { transform:'translateX(5px)' }, { transform:'none' }], { duration:200 }); return; }
+    if (save.bits < cost){ SFX.deny(); shakeBtn(); return; }
     save.bits -= cost; save.upg[u.id]++; persist(); ST = stats(); SFX.buy();
     note(`${u.name} · nivel ${save.upg[u.id]}`, 'good', u.icon, 'MEJORA INSTALADA');
-    renderShop();
+  } else if (b.dataset.lab){
+    const p = LAB.find(x => x.id === b.dataset.lab), L = perk(p.id);
+    if (L >= p.max) return;
+    if (save.params < p.cost(L)){ SFX.deny(); shakeBtn(); return; }
+    save.params -= p.cost(L); save.lab[p.id] = L + 1; persist(); ST = stats(); SFX.buy();
+    note(`${p.name} · nivel ${L + 1}`, 'good', p.icon, 'INVESTIGACIÓN COMPLETA');
+  } else if (b.dataset.prestige){
+    if (!canPrestige()){ SFX.deny(); shakeBtn(); return; }
+    if (!prestigeArm){ prestigeArm = 1; SFX.deny(); renderShop(); setTimeout(() => { prestigeArm = 0; }, 4000); return; }
+    prestigeArm = 0; doPrestige();
   } else if (b.dataset.skin){
     const s = SKINS.find(x => x.id === b.dataset.skin);
     if (save.skins.includes(s.id)){ if (save.skin !== s.id){ save.skin = s.id; SFX.ui(); } }
     else if (s.cost >= 0 && save.crystals >= s.cost){ save.crystals -= s.cost; save.skins.push(s.id); save.skin = s.id; SFX.buy(); note(s.name, 'good', 'i-palette', 'NUEVO ESTILO'); }
     else { SFX.deny(); return; }
-    persist(); renderShop();
-  }
+    persist();
+  } else return;
+  const st = $('shopBody').scrollTop; renderShop(); $('shopBody').scrollTop = st; refreshMenuInfo();
 });
 
 // ajustes
